@@ -1,8 +1,12 @@
 'use client';
 import React, { useEffect, useRef } from 'react';
-import GameCanvas from '../game/game';
+import GameCanvas from './game';
 import tempale1 from '@/../public/tempale1.png';
 import tempale2 from '@/../public/tempale2.png';
+
+import './styles.scss';
+import { cn } from '@/lib/utils';
+
 //向右x+50y+14;
 //向左x - 48 y-22;
 type Point = { x: number; y: number };
@@ -142,15 +146,39 @@ export default function Game() {
 	}, []);
 
 	return (
-		<div className="h-full overflow-auto bg-[#111827]">
-			<div className="box">
-				<canvas id="canvas" ref={canvasRef}></canvas>
+		<div className="h-screen w-screen  overflow-hidden bg-[#111827]">
+			<div className="box h-full w-full">
+				<canvas id="canvas" ref={canvasRef} className=" w-screen"></canvas>
 				<canvas
 					id="anicanvas"
 					ref={animateCanvasRef}
-					style={{ position: 'absolute', zIndex: 5, top: 0, left: 0, right: 0 }}
+					style={{ position: 'absolute', zIndex: 1, top: 0, left: 0, right: 0 }}
+					className="h-screen w-screen"
 				></canvas>
-				<button className="btn">go</button>
+				{/* <button
+					style={{ zIndex: 6 }}
+					className="btn z-6 absolute left-1/2 top-1/2 h-16 w-16 -translate-x-1/2 -translate-y-1/2 transform rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 px-1 py-1 text-xs font-bold text-white shadow-md transition duration-300 ease-in-out hover:from-purple-500 hover:to-blue-600 hover:shadow-lg"
+				>
+					roll the dice
+				</button> */}
+
+				<div
+					style={{ zIndex: 6 }}
+					className={cn(
+						'dice-button !z-6 absolute left-1/2 top-1/2 -translate-x-20 -translate-y-[120%]'
+					)}
+				>
+					<div className="scene">
+						<div className="cube">
+							<div className="face front">1</div>
+							<div className="face back">2</div>
+							<div className="face right">3</div>
+							<div className="face left">4</div>
+							<div className="face top">5</div>
+							<div className="face bottom">6</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	);

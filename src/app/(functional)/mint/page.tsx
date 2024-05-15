@@ -1,4 +1,4 @@
-const mintPage = () => {
+const MintPage = () => {
 	return (
 		<main className="h-full overflow-auto bg-[#111827]">
 			<h1 className="text-white">Your NFTS</h1>
