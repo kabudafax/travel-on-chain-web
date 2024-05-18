@@ -6,26 +6,13 @@ import tempale2 from '@/../public/tempale2.png';
 import './styles.scss';
 import user from '@/../public/man.png';
 import { cn } from '@/lib/utils';
+import { centers } from './constant';
 //向右x+50y+14;
 //向左x - 48 y-22;
 type Point = { x: number; y: number; center: { x: number; y: number } };
 type Routes = Point[];
 // 180 ,90
 // 235,108
-const centers = [
-	{ x: 180, y: 104 },
-	{ x: 230, y: 120 },
-	{ x: 282, y: 130 },
-	{ x: 340, y: 145 },
-	{ x: 295, y: 165 },
-	{ x: 250, y: 185 },
-	{ x: 200, y: 209 },
-	{ x: 150, y: 230 },
-	{ x: 105, y: 250 },
-	{ x: 150, y: 265 },
-	{ x: 205, y: 276 },
-	{ x: 165, y: 300 }
-];
 
 function right(point: Point) {
 	return {
@@ -61,6 +48,7 @@ export default function Game() {
 	const gameRef = useRef(null);
 	const gridcanvasRef = useRef(null);
 	const cordinateCanvasRef = useRef(null);
+	const start = 51;
 	function generateRoutes(
 		start: { x: number; y: number; center: { x: number; y: number } },
 		steps: { dir: 'right' | 'left' | 'up' | 'upLeft'; times: number }[]
@@ -143,7 +131,8 @@ export default function Game() {
 			height: window.innerHeight,
 			routes: routes,
 			passRoutes: [],
-			manPic: user.src
+			manPic: user.src,
+			currentIndex: start
 		});
 		let bg = new GameCanvas({
 			id: 'canvas',
@@ -180,7 +169,13 @@ export default function Game() {
 			userIcon.onload = function () {
 				const animaContext = animateCanvasRef?.current?.getContext('2d');
 				console.log(animaContext, 'animate', animateCanvasRef);
-				animaContext?.drawImage(userIcon, 180, 105, 30, 30);
+				animaContext?.drawImage(
+					userIcon,
+					centers[start].x,
+					centers[start].y,
+					30,
+					30
+				);
 			};
 			userIcon.src = user.src;
 		}
@@ -191,45 +186,45 @@ export default function Game() {
 		};
 	}, []);
 
-	useEffect(() => {
-		const canvas = gridcanvasRef.current;
-		const context = canvas.getContext('2d');
-		const width = canvas.width;
-		const height = canvas.height;
-		const gridSpacing = 15;
-		const cordinate = cordinateCanvasRef.current;
-		const cordinateContext = cordinate?.getContext('2d');
-		// Draw grid lines
-		for (let x = 0; x <= width; x += gridSpacing) {
-			context.moveTo(x, 0);
-			context.lineTo(x, height);
-		}
+	// useEffect(() => {
+	// 	const canvas = gridcanvasRef.current;
+	// 	const context = canvas.getContext('2d');
+	// 	const width = canvas.width;
+	// 	const height = canvas.height;
+	// 	const gridSpacing = 15;
+	// 	const cordinate = cordinateCanvasRef.current;
+	// 	const cordinateContext = cordinate?.getContext('2d');
+	// 	// Draw grid lines
+	// 	for (let x = 0; x <= width; x += gridSpacing) {
+	// 		context.moveTo(x, 0);
+	// 		context.lineTo(x, height);
+	// 	}
 
-		for (let y = 0; y <= height; y += gridSpacing) {
-			context.moveTo(0, y);
-			context.lineTo(width, y);
-		}
+	// 	for (let y = 0; y <= height; y += gridSpacing) {
+	// 		context.moveTo(0, y);
+	// 		context.lineTo(width, y);
+	// 	}
 
-		context.strokeStyle = '#ddd';
-		context.stroke();
+	// 	context.strokeStyle = '#ddd';
+	// 	context.stroke();
 
-		// Add mouse move event listener to show coordinates
-		cordinate.addEventListener('mousemove', (event) => {
-			const rect = cordinate.getBoundingClientRect();
-			const x = event.clientX - rect.left;
-			const y = event.clientY - rect.top;
-			cordinateContext.save(); // Save current state of the canvas
-			cordinateContext.clearRect(0, 0, width, height); // Clear previous drawings
-			cordinateContext.fillText(`x: ${x}, y: ${y}`, x, y); // Draw coordinates
-			cordinateContext.restore(); // Restore the state of the canvas
-		});
-	}, []);
+	// 	// Add mouse move event listener to show coordinates
+	// 	cordinate.addEventListener('mousemove', (event) => {
+	// 		const rect = cordinate.getBoundingClientRect();
+	// 		const x = event.clientX - rect.left;
+	// 		const y = event.clientY - rect.top;
+	// 		cordinateContext.save(); // Save current state of the canvas
+	// 		cordinateContext.clearRect(0, 0, width, height); // Clear previous drawings
+	// 		cordinateContext.fillText(`x: ${x}, y: ${y}`, x, y); // Draw coordinates
+	// 		cordinateContext.restore(); // Restore the state of the canvas
+	// 	});
+	// }, []);
 
 	async function go() {
 		await gameRef.current.animate(1);
 	}
 	return (
-		<div className="h-full overflow-auto ">
+		<div className="h-full overflow-auto bg-[#111827]">
 			<div className="box flex">
 				<div>
 					<canvas
@@ -252,7 +247,7 @@ export default function Game() {
 						width={window.innerWidth * 0.7}
 						height={window.innerHeight}
 					></canvas>
-					<canvas
+					{/* <canvas
 						ref={gridcanvasRef}
 						width={window.innerWidth * 0.7}
 						height={window.innerHeight}
@@ -275,7 +270,7 @@ export default function Game() {
 							left: 0,
 							right: 0
 						}}
-					/>
+					/> */}
 				</div>
 				<div
 					style={{ zIndex: 6 }}

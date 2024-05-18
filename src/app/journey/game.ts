@@ -6,13 +6,13 @@ export default class GameCanvas {
 		this.points = [];
 		this.animateNum = 0;
 		// window.devicePixelRatio ||
-		this.dpr = window.devicePixelRatio || 1;
+		this.dpr = 1;
 		this.routes = options.routes;
 		this.passRoutes = options.passRoutes;
 		this.initCanvas();
 		this.manPic = options.manPic;
 		this.img = new Image();
-		this.curIndex = 0;
+		this.curIndex = options.currentIndex ?? 0;
 	}
 	initCanvas() {
 		let canvas = document.getElementById(this.options.id);
@@ -130,10 +130,15 @@ export default class GameCanvas {
 	 * @Description: 开始两个坐标点之间的动画
 	 */
 	animate(index) {
+		this.curIndex =
+			index + this.curIndex == this.routes.length ? 0 : index + this.curIndex;
 		console.log(this.curIndex, 'this.curIndex');
-		const startPoint = this.routes[this.curIndex].center;
-		const endPoint = this.routes[this.curIndex + 1].center;
-		this.curIndex = index + this.curIndex;
+		const startPoint =
+			this.routes[
+				this.curIndex === 0 ? this.routes.length - 1 : this.curIndex - 1
+			].center;
+		const endPoint = this.routes[this.curIndex].center;
+
 		// if (index) {
 		// this.curIndex = index;
 		// }
