@@ -6,7 +6,7 @@ export default class GameCanvas {
 		this.points = [];
 		this.animateNum = 0;
 		// window.devicePixelRatio ||
-		this.dpr = 1;
+		this.dpr = window.devicePixelRatio || 1;
 		this.routes = options.routes;
 		this.passRoutes = options.passRoutes;
 		this.initCanvas();

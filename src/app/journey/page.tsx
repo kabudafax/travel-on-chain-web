@@ -3,52 +3,52 @@ import React, { useEffect, useRef } from 'react';
 import GameCanvas from '@/app/journey/game.ts';
 import tempale1 from '@/../public/tempale1.png';
 import tempale2 from '@/../public/tempale2.png';
+// import single4 from '@/../public/single4.png';
+// import single5 from '@/../public/single5.png';
+// import single6 from '@/../public/single6.png';
+// import d from '@/../public/d.png';
+import panda from '@/../public/panda.png';
 import './styles.scss';
 import user from '@/../public/man.png';
 import { cn } from '@/lib/utils';
 import { centers } from './constant';
+import tempale3 from '@/../public/tample3.png';
 //向右x+50y+14;
 //向左x - 48 y-22;
 type Point = { x: number; y: number; center: { x: number; y: number } };
 type Routes = Point[];
-// 180 ,90
-// 235,108
-
+const imgs = [tempale1, tempale2, panda];
 function right(point: Point) {
 	return {
 		x: point.x + 53,
 		y: point.y + 12
-		// center: { x: point.center.x + 55, y: point.center.y + 15 }
 	};
 }
 function left(point: Point) {
 	return {
 		x: point.x - 48,
 		y: point.y + 22
-		// center: { x: point.center.x - 55, y: point.center.y + 25 }
 	};
 }
 function up(point: Point) {
 	return {
 		x: point.x + 48,
 		y: point.y - 22
-		// center: { x: point.center.x + 47, y: point.center.y - 22 }
 	};
 }
 function upLeft(point: Point) {
 	return {
 		x: point.x - 53,
 		y: point.y - 12
-		// center: { x: point.center.x - 52 / 2, y: point.center.y - 12 }
 	};
 }
 export default function Game() {
 	const canvasRef = useRef(null);
 	const animateCanvasRef = useRef(null);
 	const gameRef = useRef(null);
-	const gridcanvasRef = useRef(null);
-	const cordinateCanvasRef = useRef(null);
-	const start = 51;
+	// const gridcanvasRef = useRef(null);
+	// const cordinateCanvasRef = useRef(null);
+	const start = 0;
 	function generateRoutes(
 		start: { x: number; y: number; center: { x: number; y: number } },
 		steps: { dir: 'right' | 'left' | 'up' | 'upLeft'; times: number }[]
@@ -127,7 +127,7 @@ export default function Game() {
 		console.log(routes, 'routes');
 		let game = new GameCanvas({
 			id: 'anicanvas',
-			width: window.innerWidth * 0.7,
+			width: 1000,
 			height: window.innerHeight,
 			routes: routes,
 			passRoutes: [],
@@ -136,7 +136,7 @@ export default function Game() {
 		});
 		let bg = new GameCanvas({
 			id: 'canvas',
-			width: window.innerWidth * 0.7,
+			width: 1000,
 			height: window.innerHeight,
 			routes: [],
 			passRoutes: []
@@ -144,24 +144,55 @@ export default function Game() {
 
 		gameRef.current = game;
 		console.log(canvasRef.current, 'canvasRef.current');
-		if (animateCanvasRef.current) {
-			// animateCanvasRef.current?.addEventListener('click', go);
-		}
+
 		if (canvasRef.current) {
 			const img = new Image();
-			img.onload = function () {
-				const context = canvasRef.current.getContext('2d');
-				context?.drawImage(img, 130, 150, 179 / 2, 160 / 2);
-			};
+			const imgCordinates = [
+				{ x: 130, y: 150, size: [179 / 2, 160 / 2] },
+				{ x: 80, y: 380, size: [179 / 2, 160 / 2] },
+				// { x: 100, y: 56, size: [1280, 720] },
+				{ x: 600, y: 300, size: [1920 / 2, 1080 / 2] }
+			];
+			// img.onload = function () {
+			// 	const context = canvasRef.current.getContext('2d');
+			// 	context?.drawImage(img, 130, 150, 179 / 2, 160 / 2);
+			// };
 
-			img.src = tempale1.src;
-			const img2 = new Image();
-			img2.onload = function () {
-				const context = canvasRef.current.getContext('2d');
+			// img.src = tempale1.src;
+			// const img2 = new Image();
+			// img2.onload = function () {
+			// 	const context = canvasRef.current.getContext('2d');
 
-				context?.drawImage(img2, 80, 380, 179 / 2, 160 / 2);
-			};
-			img2.src = tempale2.src;
+			// 	context?.drawImage(img2, 80, 380, 179 / 2, 160 / 2);
+			// };
+			// img2.src = tempale2.src;
+			imgs.forEach((img, inx) => {
+				const imgSingle = new Image();
+				imgSingle.onload = function () {
+					const context = canvasRef.current.getContext('2d');
+
+					if (inx === 3) {
+						context.save();
+						context.rotate((-10 * Math.PI) / 180);
+
+						context?.drawImage(
+							imgSingle,
+							imgCordinates[inx].x,
+							imgCordinates[inx].y,
+							...imgCordinates[inx].size
+						);
+						context.restore();
+					} else {
+						context?.drawImage(
+							imgSingle,
+							imgCordinates[inx].x,
+							imgCordinates[inx].y,
+							...imgCordinates[inx].size
+						);
+					}
+				};
+				imgSingle.src = img.src;
+			});
 			drawBoard(routes);
 		}
 		if (animateCanvasRef?.current) {
@@ -221,12 +252,15 @@ export default function Game() {
 	// }, []);
 
 	async function go() {
-		await gameRef.current.animate(1);
+		if (gameRef.current) gameRef.current.animate(1);
 	}
 	return (
 		<div className="h-full overflow-auto bg-[#111827]">
 			<div className="box flex">
-				<div>
+				<div
+					className="flex-shrink flex-grow-0 overflow-auto"
+					style={{ flexBasis: '70%' }}
+				>
 					<canvas
 						style={{ marginTop: 10 }}
 						id="canvas"
@@ -234,6 +268,7 @@ export default function Game() {
 						width={window.innerWidth * 0.7}
 						height={window.innerHeight}
 					></canvas>
+					<div></div>
 					<canvas
 						id="anicanvas"
 						ref={animateCanvasRef}
@@ -247,7 +282,7 @@ export default function Game() {
 						width={window.innerWidth * 0.7}
 						height={window.innerHeight}
 					></canvas>
-					{/* <canvas
+					{/*<canvas
 						ref={gridcanvasRef}
 						width={window.innerWidth * 0.7}
 						height={window.innerHeight}
@@ -270,7 +305,7 @@ export default function Game() {
 							left: 0,
 							right: 0
 						}}
-					/> */}
+					/>*/}
 				</div>
 				<div
 					style={{ zIndex: 6 }}
@@ -279,7 +314,7 @@ export default function Game() {
 					)}
 				>
 					<div className="scene">
-						<div className="cube">
+						<div className="cube" onClick={() => go()}>
 							<div className="face front">1</div>
 							<div className="face back">2</div>
 							<div className="face right">3</div>
@@ -289,13 +324,11 @@ export default function Game() {
 						</div>
 					</div>
 				</div>
-				<button
-					className="btn"
-					style={{ marginLeft: 30, fontSize: 40 }}
-					onClick={() => go()}
-				>
-					Go
-				</button>
+				<div className="flex grow justify-center">
+					<div className=" size-12 w-max  text-white" style={{ fontSize: 24 }}>
+						MY NFTS
+					</div>
+				</div>
 			</div>
 		</div>
 	);
