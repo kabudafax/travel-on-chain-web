@@ -58,7 +58,12 @@ export const Navbar = () => {
 					>
 						Wallet
 					</Button> */}
-					<ConnectButton></ConnectButton>
+					<ConnectButton
+						accountStatus={{
+							smallScreen: 'avatar',
+							largeScreen: 'full'
+						}}
+					></ConnectButton>
 				</Link>
 			</div>
 		</nav>

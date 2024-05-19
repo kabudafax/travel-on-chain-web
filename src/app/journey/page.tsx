@@ -6,6 +6,13 @@ import tempale2 from '@/../public/tempale2.png';
 
 import './styles.scss';
 import { cn } from '@/lib/utils';
+import { RollDice } from '@/components/rollDice/rollDice';
+
+import { useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
+import contractABI from './TravelVRFV2Plus.json';
+
+// sepolia
+export const contractAddress = '0x1b10AbF4a94AB96a4CDefE8B6Df08DD6A9e9A6b5';
 
 //向右x+50y+14;
 //向左x - 48 y-22;
@@ -162,7 +169,8 @@ export default function Game() {
 					roll the dice
 				</button> */}
 
-				<div
+				{/* <div
+					onClick={GetRandom}
 					style={{ zIndex: 6 }}
 					className={cn(
 						'dice-button !z-6 absolute left-1/2 top-1/2 -translate-x-20 -translate-y-[120%]'
@@ -178,7 +186,8 @@ export default function Game() {
 							<div className="face bottom">6</div>
 						</div>
 					</div>
-				</div>
+				</div> */}
+				<RollDice />
 			</div>
 		</div>
 	);
