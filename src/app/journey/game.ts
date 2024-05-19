@@ -5,16 +5,18 @@ export default class GameCanvas {
 		this.timer = null;
 		this.points = [];
 		this.animateNum = 0;
+		// window.devicePixelRatio ||
 		this.dpr = window.devicePixelRatio || 1;
 		this.routes = options.routes;
 		this.passRoutes = options.passRoutes;
 		this.initCanvas();
 		this.manPic = options.manPic;
 		this.img = new Image();
-		this.curIndex = null;
+		this.curIndex = options.currentIndex ?? 0;
 	}
 	initCanvas() {
 		let canvas = document.getElementById(this.options.id);
+		console.log(this.dpr, 'this.dpr');
 		canvas.width = this.options.width * this.dpr;
 		canvas.height = this.options.height * this.dpr;
 		this.ctx = canvas.getContext('2d');
@@ -128,10 +130,15 @@ export default class GameCanvas {
 	 * @Description: 开始两个坐标点之间的动画
 	 */
 	animate(index) {
-		let speed = 1;
+		this.curIndex =
+			index + this.curIndex == this.routes.length ? 0 : index + this.curIndex;
+		console.log(this.curIndex, 'this.curIndex');
 		const startPoint =
-			this.routes[index !== undefined ? index - 1 : this.curIndex - 1];
-		const endPoint = this.routes[index !== undefined ? index : this.curIndex];
+			this.routes[
+				this.curIndex === 0 ? this.routes.length - 1 : this.curIndex - 1
+			].center;
+		const endPoint = this.routes[this.curIndex].center;
+
 		// if (index) {
 		// this.curIndex = index;
 		// }
@@ -141,6 +148,7 @@ export default class GameCanvas {
 
 		let xStep = (endPoint.x - startPoint.x) / 20;
 		let yStep = (endPoint.y - startPoint.y) / 20;
+		console.log(yStep, 'yStep');
 		let x = startPoint.x;
 		let y = startPoint.y;
 		console.log(startPoint, endPoint, 'draw', x, y);
@@ -152,12 +160,19 @@ export default class GameCanvas {
 			// 	}
 			// });
 			this.img.onload = () => {
-				x = Math.round(xStep + x);
-				y = Math.round(yStep + y);
+				let xleft = Math.abs(x - endPoint.x) < 1;
+				let yleft = Math.abs(y - endPoint.y) < 1;
+				// if (xleft) x = Math.round(x + xStep);
+				// if (yleft) y = Math.round(y + yStep);
+				// if (xleft)
+				x = xleft ? x : xStep + x;
+				console.log(yStep, y, Math.round(yStep + y), 'round');
+				// if (yleft)
+				y = yleft ? y : yStep + y;
 				this.ctx.clearRect(0, 0, this.options.width, this.options.height); // clear canvas
-				this.ctx.drawImage(this.img, x, y, 179 / 2, 160 / 2); // draw image at current position
-				if (Math.abs(x - endPoint.x) !== 0 && Math.abs(y - endPoint.y) !== 0)
-					requestAnimationFrame(() => draw(index)); // loop
+				this.ctx.drawImage(this.img, x, y, 30, 30); // draw image at current position
+				console.log('===', x, endPoint.x, y, endPoint.y);
+				if (!xleft && !yleft) requestAnimationFrame(() => draw(index)); // loop
 			};
 			this.img.src = this.manPic;
 		};
@@ -168,7 +183,7 @@ export default class GameCanvas {
 		// this.img.src = this.manPic;
 
 		// window.requestAnimationFrame(() => {
-		// 	if (Math.abs(x - endPoint.x) !== 0 && Math.abs(y - endPoint.y) !== 0) {
+		// 	if (Math.abs(x - endPoint.x) !== 0 || Math.abs(y - endPoint.y) !== 0) {
 		// 		draw();
 		// 	}
 		// });
@@ -182,24 +197,6 @@ export default class GameCanvas {
 		// this.points.push(end);
 		// this.startAnimate(resolve, reject);
 	}
-	x = 0;
-	y = 0;
-	animate2(index) {
-		// this.img.src = this.manPic
-		const startPoint =
-			this.routes[index !== undefined ? index - 1 : this.curIndex - 1];
-		x = this.x;
-		const endPoint = this.routes[index !== undefined ? index : this.curIndex];
-		console.log(this.x, startPoint.y, 'draw');
-		this.img.onload = () => {
-			this.ctx.clearRect(0, 0, this.options.width, this.options.height); // clear canvas
-			this.ctx.drawImage(this.img, this.x, startPoint.y, 179 / 2, 160 / 2); // draw image at current position
-			this.x -= 4;
-			if (this.x > 0) requestAnimationFrame(() => this.animate(index)); // loop
-		};
-		this.img.src = this.manPic;
-	}
-
 	startAnimate(resolve, reject) {
 		let nowPoint = this.points[this.animateNum];
 		this.animateNum++;
