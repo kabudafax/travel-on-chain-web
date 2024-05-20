@@ -31,8 +31,6 @@ export const RollDice = () => {
 	const chainId = useChainId();
 	console.log('blockchainID', chainId);
 
-	let intervalId: number;
-
 	// VRF contract address
 	let vrfContractAddress: `0x${string}`;
 	switch (String(chainId)) {
@@ -45,6 +43,24 @@ export const RollDice = () => {
 		default:
 			vrfContractAddress = '0x1b10AbF4a94AB96a4CDefE8B6Df08DD6A9e9A6b5';
 	}
+
+	const request = useContractRead({
+		abi: contractABI.abi,
+		address: vrfContractAddress,
+		functionName: 'getRequestIds',
+		args: ['0x797F3E3AcAac209847a9aa572D394D1b5cce4015']
+	});
+	console.log('middle', request);
+	const requestStatus = useReadContract({
+		abi: contractABI.abi,
+		address: vrfContractAddress,
+		functionName: 'getRequestStatus',
+		args: [
+			// '108492930318908305654512126985601496615628550396753277270371717329412884530226'
+			'0xdf6c6d3efd581b26f26f35cdea02f21b741c6e215e2579a6d291abe7ce6d0cdf'
+		]
+	});
+	let intervalId: number;
 
 	useAccountEffect({
 		onConnect(data) {
@@ -105,22 +121,7 @@ export const RollDice = () => {
 			// 	]
 			// value: parseEther('0.01')
 			// });
-			const request = useContractRead({
-				abi: contractABI.abi,
-				address: vrfContractAddress,
-				functionName: 'getRequestIds',
-				args: ['0x797F3E3AcAac209847a9aa572D394D1b5cce4015']
-			});
-			console.log('middle', request);
-			const requestStatus = useReadContract({
-				abi: contractABI.abi,
-				address: vrfContractAddress,
-				functionName: 'getRequestStatus',
-				args: [
-					// '108492930318908305654512126985601496615628550396753277270371717329412884530226'
-					'0xdf6c6d3efd581b26f26f35cdea02f21b741c6e215e2579a6d291abe7ce6d0cdf'
-				]
-			});
+
 			console.log('222');
 			if (requestStatus !== null) {
 				// 如果查询结果不为 null，表示查到了结果，更新状态并停止轮询
