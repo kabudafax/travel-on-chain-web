@@ -8,6 +8,7 @@ import * as china from '@/components/china.json';
 
 const inter = Inter({ subsets: ['latin'] });
 import * as echarts from 'echarts/core';
+import { Navbar } from '@/components/navbar';
 // @ts-ignore
 echarts.registerMap('china', china);
 

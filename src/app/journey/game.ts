@@ -16,7 +16,7 @@ export default class GameCanvas {
 	}
 	initCanvas() {
 		let canvas = document.getElementById(this.options.id);
-		console.log(this.dpr, 'this.dpr');
+		// console.log(this.dpr, 'this.dpr');
 		canvas.width = this.options.width * this.dpr;
 		canvas.height = this.options.height * this.dpr;
 		this.ctx = canvas.getContext('2d');
@@ -148,10 +148,10 @@ export default class GameCanvas {
 
 		let xStep = (endPoint.x - startPoint.x) / 20;
 		let yStep = (endPoint.y - startPoint.y) / 20;
-		console.log(yStep, 'yStep');
+		// console.log(yStep, 'yStep');
 		let x = startPoint.x;
 		let y = startPoint.y;
-		console.log(startPoint, endPoint, 'draw', x, y);
+		// console.log(startPoint, endPoint, 'draw', x, y);
 		// this.img.onload = () => {
 		const draw = (index) => {
 			// window.requestAnimationFrame(() => {
@@ -166,12 +166,12 @@ export default class GameCanvas {
 				// if (yleft) y = Math.round(y + yStep);
 				// if (xleft)
 				x = xleft ? x : xStep + x;
-				console.log(yStep, y, Math.round(yStep + y), 'round');
+				// console.log(yStep, y, Math.round(yStep + y), 'round');
 				// if (yleft)
 				y = yleft ? y : yStep + y;
 				this.ctx.clearRect(0, 0, this.options.width, this.options.height); // clear canvas
 				this.ctx.drawImage(this.img, x, y, 30, 30); // draw image at current position
-				console.log('===', x, endPoint.x, y, endPoint.y);
+				// console.log('===', x, endPoint.x, y, endPoint.y);
 				if (!xleft && !yleft) requestAnimationFrame(() => draw(index)); // loop
 			};
 			this.img.src = this.manPic;

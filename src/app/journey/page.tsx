@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import GameCanvas from '@/app/journey/game.ts';
 import tempale1 from '@/../public/tempale1.png';
 import tempale2 from '@/../public/tempale2.png';
@@ -8,19 +8,14 @@ import tempale2 from '@/../public/tempale2.png';
 // import single6 from '@/../public/single6.png';
 // import d from '@/../public/d.png';
 import panda from '@/../public/panda.png';
-import './styles.scss';
 import user from '@/../public/man.png';
-import { cn } from '@/lib/utils';
-import { RollDice } from '@/components/rollDice/rollDice';
-
-import { useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
-import contractABI from './TravelVRFV2Plus.json';
-
-// sepolia
-export const contractAddress = '0x1b10AbF4a94AB96a4CDefE8B6Df08DD6A9e9A6b5';
-
 import { centers } from './constant';
 import tempale3 from '@/../public/tample3.png';
+
+import { cn } from '@/lib/utils';
+import '@/components/rollDice/styles.scss';
+import { RollDice } from '@/components/rollDice/rollDice';
+
 //向右x+50y+14;
 //向左x - 48 y-22;
 type Point = { x: number; y: number; center: { x: number; y: number } };
@@ -51,6 +46,7 @@ function upLeft(point: Point) {
 	};
 }
 export default function Game() {
+	const [canvasWidth, setCanvasWidth] = useState(0);
 	const canvasRef = useRef(null);
 	const animateCanvasRef = useRef(null);
 	const gameRef = useRef(null);
@@ -93,7 +89,7 @@ export default function Game() {
 					break;
 			}
 		});
-		console.log(routes, 'routes');
+		// console.log(routes, 'routes');
 		return routes;
 	}
 
@@ -132,7 +128,7 @@ export default function Game() {
 				{ dir: 'left', times: 1 }
 			]
 		)?.map((route, inx) => ({ ...route, center: centers[inx] }));
-		console.log(routes, 'routes');
+		// console.log(routes, 'routes');
 		let game = new GameCanvas({
 			id: 'anicanvas',
 			width: 1000,
@@ -151,7 +147,7 @@ export default function Game() {
 		});
 
 		gameRef.current = game;
-		console.log(canvasRef.current, 'canvasRef.current');
+		// console.log(canvasRef.current, 'canvasRef.current');
 
 		if (canvasRef.current) {
 			const img = new Image();
@@ -207,7 +203,7 @@ export default function Game() {
 			const userIcon = new Image();
 			userIcon.onload = function () {
 				const animaContext = animateCanvasRef?.current?.getContext('2d');
-				console.log(animaContext, 'animate', animateCanvasRef);
+				// console.log(animaContext, 'animate', animateCanvasRef);
 				animaContext?.drawImage(
 					userIcon,
 					centers[start].x,
@@ -218,54 +214,27 @@ export default function Game() {
 			};
 			userIcon.src = user.src;
 		}
+
+		// 设置canvas绘制的宽高
+		const handleResize = () => {
+			setCanvasWidth(window.innerWidth * 0.7);
+		};
+		handleResize();
+		window.addEventListener('resize', handleResize);
+		// console.log(window);
+
 		return () => {
 			if (canvasRef.current) {
 				animateCanvasRef.current?.removeEventListener('click', go);
 			}
+			window.removeEventListener('resize', handleResize);
 		};
 	}, []);
-
-	// useEffect(() => {
-	// 	const canvas = gridcanvasRef.current;
-	// 	const context = canvas.getContext('2d');
-	// 	const width = canvas.width;
-	// 	const height = canvas.height;
-	// 	const gridSpacing = 15;
-	// 	const cordinate = cordinateCanvasRef.current;
-	// 	const cordinateContext = cordinate?.getContext('2d');
-	// 	// Draw grid lines
-	// 	for (let x = 0; x <= width; x += gridSpacing) {
-	// 		context.moveTo(x, 0);
-	// 		context.lineTo(x, height);
-	// 	}
-
-<<<<<<< HEAD
-				{/* <div
-					onClick={GetRandom}
-=======
-	// 	for (let y = 0; y <= height; y += gridSpacing) {
-	// 		context.moveTo(0, y);
-	// 		context.lineTo(width, y);
-	// 	}
-
-	// 	context.strokeStyle = '#ddd';
-	// 	context.stroke();
-
-	// 	// Add mouse move event listener to show coordinates
-	// 	cordinate.addEventListener('mousemove', (event) => {
-	// 		const rect = cordinate.getBoundingClientRect();
-	// 		const x = event.clientX - rect.left;
-	// 		const y = event.clientY - rect.top;
-	// 		cordinateContext.save(); // Save current state of the canvas
-	// 		cordinateContext.clearRect(0, 0, width, height); // Clear previous drawings
-	// 		cordinateContext.fillText(`x: ${x}, y: ${y}`, x, y); // Draw coordinates
-	// 		cordinateContext.restore(); // Restore the state of the canvas
-	// 	});
-	// }, []);
 
 	async function go() {
 		if (gameRef.current) gameRef.current.animate(1);
 	}
+
 	return (
 		<div className="h-full overflow-auto bg-[#111827]">
 			<div className="box flex">
@@ -274,11 +243,9 @@ export default function Game() {
 					style={{ flexBasis: '70%' }}
 				>
 					<canvas
-						style={{ marginTop: 10 }}
+						style={{ marginTop: 10, width: canvasWidth }}
 						id="canvas"
 						ref={canvasRef}
-						width={window.innerWidth * 0.7}
-						height={window.innerHeight}
 					></canvas>
 					<div></div>
 					<canvas
@@ -287,40 +254,15 @@ export default function Game() {
 						style={{
 							position: 'absolute',
 							zIndex: 5,
-							top: 10,
+							// top: 10,
+							top: 82,
 							left: 0,
-							right: 0
+							right: 0,
+							width: canvasWidth
 						}}
-						width={window.innerWidth * 0.7}
-						height={window.innerHeight}
 					></canvas>
-					{/*<canvas
-						ref={gridcanvasRef}
-						width={window.innerWidth * 0.7}
-						height={window.innerHeight}
-						style={{
-							position: 'absolute',
-							zIndex: 50,
-							top: 10,
-							left: 0,
-							right: 0
-						}}
-					/>
-					<canvas
-						ref={cordinateCanvasRef}
-						width={window.innerWidth * 0.7}
-						height={window.innerHeight}
-						style={{
-							position: 'absolute',
-							zIndex: 55,
-							top: 10,
-							left: 0,
-							right: 0
-						}}
-					/>*/}
 				</div>
-				<div
->>>>>>> ac480c7f5bac5e9fd6199c93c0f706f7e7c4d9ee
+				{/* <div
 					style={{ zIndex: 6 }}
 					className={cn(
 						'dice-button !z-6 absolute left-1/2 top-1/2 -translate-x-20 -translate-y-[120%]'
@@ -336,17 +278,13 @@ export default function Game() {
 							<div className="face bottom">6</div>
 						</div>
 					</div>
-<<<<<<< HEAD
 				</div> */}
 				<RollDice />
-=======
-				</div>
 				<div className="flex grow justify-center">
 					<div className=" size-12 w-max  text-white" style={{ fontSize: 24 }}>
 						MY NFTS
 					</div>
 				</div>
->>>>>>> ac480c7f5bac5e9fd6199c93c0f706f7e7c4d9ee
 			</div>
 		</div>
 	);

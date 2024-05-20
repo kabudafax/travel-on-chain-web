@@ -1,13 +1,6 @@
-import {
-	getDefaultConfig,
-	Chain,
-} from '@rainbow-me/rainbowkit';
+import { getDefaultConfig, Chain } from '@rainbow-me/rainbowkit';
 
-
-import {
-	mainnet,
-	sepolia,
-  } from 'wagmi/chains';
+import { mainnet, sepolia, arbitrumSepolia } from 'wagmi/chains';
 
 const Morph = {
 	id: 2710,
@@ -15,14 +8,17 @@ const Morph = {
 	iconBackground: '#fff',
 	nativeCurrency: { name: 'ETH', symbol: 'ETH', decimals: 18 },
 	rpcUrls: {
-		default: { http: ['https://rpc-testnet.morphl2.io'] },
+		default: { http: ['https://rpc-testnet.morphl2.io'] }
 	},
 	blockExplorers: {
-		default: { name: 'MorphExplorer', url: 'https://explorer-testnet.morphl2.io' },
-	},
+		default: {
+			name: 'MorphExplorer',
+			url: 'https://explorer-testnet.morphl2.io'
+		}
+	}
 } as const satisfies Chain;
 export const config = getDefaultConfig({
 	appName: 'My RainbowKit App',
 	projectId: 'YOUR_PROJECT_ID',
-	chains: [mainnet,sepolia,Morph],
+	chains: [mainnet, sepolia, arbitrumSepolia, Morph]
 });

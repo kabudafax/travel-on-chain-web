@@ -17,10 +17,15 @@ const navigation = [
 	{ name: 'Github', href: 'https://github.com/composable-NFT' }
 ];
 
-export const Navbar = () => {
+export const Navbar = ({ className }: { className: String }) => {
 	const { connect } = useConnect();
 	return (
-		<nav className="flex items-center justify-between bg-transparent p-4">
+		<nav
+			className={cn(
+				'flex items-center justify-between bg-transparent p-4',
+				className
+			)}
+		>
 			<Link href="/" className="flex items-center">
 				<div className="relative mr-4 h-8 w-8">
 					<Image
