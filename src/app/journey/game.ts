@@ -133,6 +133,7 @@ export default class GameCanvas {
 		this.curIndex =
 			index + this.curIndex == this.routes.length ? 0 : index + this.curIndex;
 		console.log(this.curIndex, 'this.curIndex');
+		window.localStorage.setItem('currentPosition',this.curIndex);
 		const startPoint =
 			this.routes[
 				this.curIndex === 0 ? this.routes.length - 1 : this.curIndex - 1
