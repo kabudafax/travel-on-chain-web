@@ -157,7 +157,7 @@ export const RollDice = ({ onDiceChange }: { onDiceChange: Function }) => {
 					)
 				});
 				for (let i = 0; i < diceNumber; i++) {
-					onDiceChange();
+					onDiceChange(1);
 				}
 			}
 		} catch (error) {
