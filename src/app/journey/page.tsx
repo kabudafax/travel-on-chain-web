@@ -1,5 +1,7 @@
 'use client';
 import React, { useEffect, useRef, useState } from 'react';
+// import { useAccountEffect, useContractRead } from 'wagmi'
+// import {contractConfig, points} from '@/config/NFT-contract.js'
 import GameCanvas from '@/app/journey/game.ts';
 import tempale1 from '@/../public/tempale1.png';
 import tempale2 from '@/../public/tempale2.png';
@@ -21,38 +23,56 @@ import { RollDice } from '@/components/rollDice/rollDice';
 type Point = { x: number; y: number; center: { x: number; y: number } };
 type Routes = Point[];
 const imgs = [tempale1, tempale2, panda];
+
 function right(point: Point) {
 	return {
 		x: point.x + 53,
 		y: point.y + 12
 	};
 }
+
 function left(point: Point) {
 	return {
 		x: point.x - 48,
 		y: point.y + 22
 	};
 }
+
 function up(point: Point) {
 	return {
 		x: point.x + 48,
 		y: point.y - 22
 	};
 }
+
 function upLeft(point: Point) {
 	return {
 		x: point.x - 53,
 		y: point.y - 12
 	};
 }
+
 export default function Game() {
 	const [canvasWidth, setCanvasWidth] = useState(0);
 	const canvasRef = useRef(null);
 	const animateCanvasRef = useRef(null);
 	const gameRef = useRef(null);
+	// 从合约读取用户初始点位
+	// const { refetch } = useContractRead({
+	// 	...contractConfig,
+	// 	functionName: 'getUserPosition',
+	// 	args:['China']
+	// });
 	// const gridcanvasRef = useRef(null);
 	// const cordinateCanvasRef = useRef(null);
-	const start = localStorage.getItem('lastIndex')?localStorage.getItem('lastIndex'):0;
+	const start = localStorage.getItem('currentPosition') ? parseInt(localStorage.getItem('currentPosition'),10) : 0;
+	console.log('start------',start);
+	// 	const position = window.localStorage.getItem('currentPosition');
+	// 	if (position) {
+	// 		console.log('currentPosition',position);
+	// 		go(parseInt(position, 10));
+	// 	}
+
 	function generateRoutes(
 		start: { x: number; y: number; center: { x: number; y: number } },
 		steps: { dir: 'right' | 'left' | 'up' | 'upLeft'; times: number }[]
@@ -172,7 +192,7 @@ export default function Game() {
 			// img2.src = tempale2.src;
 			imgs.forEach((img, inx) => {
 				const imgSingle = new Image();
-				imgSingle.onload = function () {
+				imgSingle.onload = function() {
 					const context = canvasRef.current.getContext('2d');
 
 					if (inx === 3) {
@@ -201,7 +221,7 @@ export default function Game() {
 		}
 		if (animateCanvasRef?.current) {
 			const userIcon = new Image();
-			userIcon.onload = function () {
+			userIcon.onload = function() {
 				const animaContext = animateCanvasRef?.current?.getContext('2d');
 				// console.log(animaContext, 'animate', animateCanvasRef);
 				animaContext?.drawImage(
@@ -222,7 +242,6 @@ export default function Game() {
 		handleResize();
 		window.addEventListener('resize', handleResize);
 		// console.log(window);
-
 		return () => {
 			if (canvasRef.current) {
 				animateCanvasRef.current?.removeEventListener('click', go);
@@ -235,21 +254,41 @@ export default function Game() {
 		if (gameRef.current) gameRef.current.animate(moves);
 	}
 
+	// useAccountEffect({
+	// 	onConnect(data) {
+	// 		console.log('Connected!', data)
+	// 		initPosition()
+	// 	},
+	// })
+
+	// 从合约获取当前用户位置 当钱包连接或者 链切换的时候去调用
+	// async function initPosition(){
+	// 	const { data, error } = await refetch();
+	// 	if (error) {
+	// 		console.error("Error reading contract:", error);
+	// 	} else {
+	// 		// 根据返回的城市名 跳转到指定位置
+	// 		if(points[data]){
+	// 			go(points[data])
+	// 		}
+	// 	}
+	// }
+
 	return (
-		<div className="h-full overflow-auto bg-[#111827]">
-			<div className="box flex">
+		<div className='h-full overflow-auto bg-[#111827]'>
+			<div className='box flex'>
 				<div
-					className="flex-shrink flex-grow-0 overflow-auto"
+					className='flex-shrink flex-grow-0 overflow-auto'
 					style={{ flexBasis: '70%' }}
 				>
 					<canvas
 						style={{ marginTop: 10, width: canvasWidth }}
-						id="canvas"
+						id='canvas'
 						ref={canvasRef}
 					></canvas>
 					<div></div>
 					<canvas
-						id="anicanvas"
+						id='anicanvas'
 						ref={animateCanvasRef}
 						style={{
 							position: 'absolute',
@@ -280,8 +319,8 @@ export default function Game() {
 					</div>
 				</div> */}
 				<RollDice onDiceChange={go} />
-				<div className="flex grow justify-center">
-					<div className=" size-12 w-max  text-white" style={{ fontSize: 24 }}>
+				<div className='flex grow justify-center'>
+					<div className=' size-12 w-max  text-white' style={{ fontSize: 24 }}>
 						MY NFTS
 					</div>
 				</div>
