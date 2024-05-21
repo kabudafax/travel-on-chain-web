@@ -150,14 +150,14 @@ export const RollDice = ({ onDiceChange }: { onDiceChange: Function }) => {
 					description: (
 						<div className="text-lg font-semibold text-gray-700">
 							The Dice Number is
-							<span className="text-4xl font-bold text-blue-500">
+							<span className="ml-2 text-4xl font-bold text-blue-500">
 								{diceNumber}
 							</span>
 						</div>
 					)
 				});
-				for (let i = 0; i < diceNumber; i++) {
-					onDiceChange(1);
+				for (let index = 0; index < diceNumber; index++) {
+					await onDiceChange(1);
 				}
 			}
 		} catch (error) {
@@ -175,8 +175,11 @@ export const RollDice = ({ onDiceChange }: { onDiceChange: Function }) => {
 				// 	)
 				// }
 				// onClick={GetRandom}
-				onClick={() => {
-					onDiceChange(Math.floor(Math.random() * 6) + 1);
+				onClick={async () => {
+					const num = Math.floor(Math.random() * 6) + 1;
+					for (let index = 0; index < num; index++) {
+						await onDiceChange(1);
+					}
 				}}
 				style={{ zIndex: 6 }}
 				className={cn(

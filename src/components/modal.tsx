@@ -52,9 +52,19 @@ const Modal: React.FC<ModalProps> = ({ show, onClose }) => {
 				<div>
 					{/* @ts-ignore */}
 					<p className="flex-grow text-black">{info?.name}</p>
-					<div className=" text-start text-xs  font-normal text-gray-500">
-						{/* @ts-ignore */}
+					{/* <div className=" text-start text-xs  font-normal text-gray-500">
+						
 						{info?.des}
+					</div> */}
+					<div className="mt-4 overflow-hidden">
+						<video
+							src="https://i.imgur.com/338QfhC.mp4"
+							loop
+							muted
+							controls
+							autoPlay
+							className="max-h-65 w-80 object-contain"
+						></video>
 					</div>
 					{/* <Button
 						variant="premium"

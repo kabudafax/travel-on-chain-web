@@ -18,6 +18,9 @@ import { cn } from '@/lib/utils';
 import '@/components/rollDice/styles.scss';
 import { RollDice } from '@/components/rollDice/rollDice';
 
+import Modal from '@/components/modal';
+import { useModalStore } from '@/store/useModalStore';
+
 //向右x+50y+14;
 //向左x - 48 y-22;
 type Point = { x: number; y: number; center: { x: number; y: number } };
@@ -66,12 +69,14 @@ export default function Game() {
 	// const gridcanvasRef = useRef(null);
 	// const cordinateCanvasRef = useRef(null);
 	const start = localStorage.getItem('currentPosition') ? parseInt(localStorage.getItem('currentPosition'),10) : 0;
-	console.log('start------',start);
-	// 	const position = window.localStorage.getItem('currentPosition');
-	// 	if (position) {
-	// 		console.log('currentPosition',position);
-	// 		go(parseInt(position, 10));
-	// 	}
+	// if (typeof window !== 'undefined') {
+	// 	start =
+	// 		window.localStorage.getItem('lastIndex') !== null &&
+	// 		window.localStorage.getItem('lastIndex') !== ''
+	// 			? localStorage.getItem('lastIndex')
+	// 			: 0;
+	// }
+	const { isShow, setIsShow } = useModalStore();
 
 	function generateRoutes(
 		start: { x: number; y: number; center: { x: number; y: number } },
@@ -192,7 +197,7 @@ export default function Game() {
 			// img2.src = tempale2.src;
 			imgs.forEach((img, inx) => {
 				const imgSingle = new Image();
-				imgSingle.onload = function() {
+				imgSingle.onload = function () {
 					const context = canvasRef.current.getContext('2d');
 
 					if (inx === 3) {
@@ -221,7 +226,7 @@ export default function Game() {
 		}
 		if (animateCanvasRef?.current) {
 			const userIcon = new Image();
-			userIcon.onload = function() {
+			userIcon.onload = function () {
 				const animaContext = animateCanvasRef?.current?.getContext('2d');
 				// console.log(animaContext, 'animate', animateCanvasRef);
 				animaContext?.drawImage(
@@ -242,6 +247,7 @@ export default function Game() {
 		handleResize();
 		window.addEventListener('resize', handleResize);
 		// console.log(window);
+
 		return () => {
 			if (canvasRef.current) {
 				animateCanvasRef.current?.removeEventListener('click', go);
@@ -251,7 +257,12 @@ export default function Game() {
 	}, []);
 
 	async function go(moves: number) {
-		if (gameRef.current) gameRef.current.animate(moves);
+		if (gameRef.current) {
+			await gameRef.current.animate(moves);
+		}
+		setTimeout(() => {
+			setIsShow(true);
+		}, 2000);
 	}
 
 	// useAccountEffect({
@@ -275,20 +286,22 @@ export default function Game() {
 	// }
 
 	return (
-		<div className='h-full overflow-auto bg-[#111827]'>
-			<div className='box flex'>
+		<div className="h-full overflow-auto bg-[#111827]">
+			<Modal show={isShow} onClose={() => setIsShow(false)} />
+
+			<div className="box flex">
 				<div
-					className='flex-shrink flex-grow-0 overflow-auto'
+					className="flex-shrink flex-grow-0 overflow-auto"
 					style={{ flexBasis: '70%' }}
 				>
 					<canvas
 						style={{ marginTop: 10, width: canvasWidth }}
-						id='canvas'
+						id="canvas"
 						ref={canvasRef}
 					></canvas>
 					<div></div>
 					<canvas
-						id='anicanvas'
+						id="anicanvas"
 						ref={animateCanvasRef}
 						style={{
 							position: 'absolute',
@@ -319,8 +332,8 @@ export default function Game() {
 					</div>
 				</div> */}
 				<RollDice onDiceChange={go} />
-				<div className='flex grow justify-center'>
-					<div className=' size-12 w-max  text-white' style={{ fontSize: 24 }}>
+				<div className="flex grow justify-center">
+					<div className=" size-12 w-max  text-white" style={{ fontSize: 24 }}>
 						MY NFTS
 					</div>
 				</div>
