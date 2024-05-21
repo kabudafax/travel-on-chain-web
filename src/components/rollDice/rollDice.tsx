@@ -156,7 +156,9 @@ export const RollDice = ({ onDiceChange }: { onDiceChange: Function }) => {
 						</div>
 					)
 				});
-				onDiceChange(diceNumber);
+				for (let i = 0; i < diceNumber; i++) {
+					onDiceChange();
+				}
 			}
 		} catch (error) {
 			console.log(error);

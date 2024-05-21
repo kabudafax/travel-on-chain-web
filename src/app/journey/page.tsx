@@ -52,7 +52,7 @@ export default function Game() {
 	const gameRef = useRef(null);
 	// const gridcanvasRef = useRef(null);
 	// const cordinateCanvasRef = useRef(null);
-	const start = 0;
+	const start = localStorage.getItem('lastIndex')?localStorage.getItem('lastIndex'):0;
 	function generateRoutes(
 		start: { x: number; y: number; center: { x: number; y: number } },
 		steps: { dir: 'right' | 'left' | 'up' | 'upLeft'; times: number }[]
