@@ -231,8 +231,8 @@ export default function Game() {
 		};
 	}, []);
 
-	async function go() {
-		if (gameRef.current) gameRef.current.animate(1);
+	async function go(moves: number) {
+		if (gameRef.current) gameRef.current.animate(moves);
 	}
 
 	return (
@@ -279,7 +279,7 @@ export default function Game() {
 						</div>
 					</div>
 				</div> */}
-				<RollDice />
+				<RollDice onDiceChange={go} />
 				<div className="flex grow justify-center">
 					<div className=" size-12 w-max  text-white" style={{ fontSize: 24 }}>
 						MY NFTS

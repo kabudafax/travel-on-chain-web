@@ -32,10 +32,10 @@ type RequestStatusType = {
 	timestamp: bigint;
 };
 
-export const RollDice = () => {
+export const RollDice = ({ onDiceChange }: { onDiceChange: Function }) => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [loadingText, setLoadingText] = useState('');
-	const [dice, setDice] = useState(0); // 保存最新的dice值
+	const [diceNumber, setDiceNumber] = useState(0); // 保存最新的dice值
 	const { toast } = useToast();
 
 	const { data: hash, writeContract, writeContractAsync } = useWriteContract();
@@ -141,10 +141,22 @@ export const RollDice = () => {
 
 			if (requestStatus.fulfilled == true) {
 				// 如果fulfilled为true，表示vrf已经返回
-				setDice(requestStatus.dice);
+				setDiceNumber(requestStatus.dice);
 				setIsLoading(false);
-				console.log(dice, 'diceNumber');
+				console.log(diceNumber, 'diceNumber');
 				clearInterval(intervalId); // 停止轮询
+				toast({
+					title: 'Roll Dice successfully 🎉',
+					description: (
+						<div className="text-lg font-semibold text-gray-700">
+							The Dice Number is
+							<span className="text-4xl font-bold text-blue-500">
+								{diceNumber}
+							</span>
+						</div>
+					)
+				});
+				onDiceChange(diceNumber);
 			}
 		} catch (error) {
 			console.log(error);
@@ -157,12 +169,13 @@ export const RollDice = () => {
 				// onClick={() =>
 				// 	pollDice(
 				// 		// '0xdf6c6d3efd581b26f26f35cdea02f21b741c6e215e2579a6d291abe7ce6d0cdf'
-				// 		// '0xcebcb777c8f01b7c17ad8d7cea6b2f8066f51d0f9ca10a995010aebaa6bed4c8'
 				// 		'53451079860721686341348306905162466791097797790594216056973463453765963746680'
-				// 		// ‘0x9b2f2ebe8ca89af55cdfb2b3a6223039cc0a1471f80f1c762b6ec875bc03e6ac’
 				// 	)
 				// }
-				onClick={GetRandom}
+				// onClick={GetRandom}
+				onClick={() => {
+					onDiceChange(Math.floor(Math.random() * 6) + 1);
+				}}
 				style={{ zIndex: 6 }}
 				className={cn(
 					'dice-button !z-6 absolute left-1/2 top-1/2 -translate-x-20 -translate-y-[120%]'
