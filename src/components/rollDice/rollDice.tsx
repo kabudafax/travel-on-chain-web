@@ -150,7 +150,7 @@ export const RollDice = ({ onDiceChange }: { onDiceChange: Function }) => {
 					description: (
 						<div className="text-lg font-semibold text-gray-700">
 							The Dice Number is
-							<span className="text-4xl font-bold text-blue-500">
+							<span className="ml-2 text-4xl font-bold text-blue-500">
 								{diceNumber}
 							</span>
 						</div>

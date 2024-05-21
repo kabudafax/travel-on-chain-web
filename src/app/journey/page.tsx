@@ -16,6 +16,9 @@ import { cn } from '@/lib/utils';
 import '@/components/rollDice/styles.scss';
 import { RollDice } from '@/components/rollDice/rollDice';
 
+import Modal from '@/components/modal';
+import { useModalStore } from '@/store/useModalStore';
+
 //向右x+50y+14;
 //向左x - 48 y-22;
 type Point = { x: number; y: number; center: { x: number; y: number } };
@@ -60,6 +63,8 @@ export default function Game() {
 	// 			? localStorage.getItem('lastIndex')
 	// 			: 0;
 	// }
+	const { isShow, setIsShow } = useModalStore();
+
 	function generateRoutes(
 		start: { x: number; y: number; center: { x: number; y: number } },
 		steps: { dir: 'right' | 'left' | 'up' | 'upLeft'; times: number }[]
@@ -242,10 +247,15 @@ export default function Game() {
 		if (gameRef.current) {
 			await gameRef.current.animate(moves);
 		}
+		setTimeout(() => {
+			setIsShow(true);
+		}, 2000);
 	}
 
 	return (
 		<div className="h-full overflow-auto bg-[#111827]">
+			<Modal show={isShow} onClose={() => setIsShow(false)} />
+
 			<div className="box flex">
 				<div
 					className="flex-shrink flex-grow-0 overflow-auto"

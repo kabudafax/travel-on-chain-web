@@ -8,7 +8,7 @@ export default function Home() {
 	return (
 		<main className="h-full overflow-auto bg-[#111827]">
 			<div className="mx-auto h-full max-w-screen-xl">
-				<Navbar />
+				<Navbar className="" />
 				<Hreo />
 				<div id="home" className=" relative -mt-20">
 					<div id="list-container" className="flex justify-center">
