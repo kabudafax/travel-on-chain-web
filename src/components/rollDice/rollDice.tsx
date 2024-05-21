@@ -2,39 +2,51 @@
 import './styles.scss';
 import { cn } from '@/lib/utils';
 import { parseEther, formatEther } from 'viem';
+// import {} from '@types'
 
 import {
 	useWriteContract,
-	useWaitForTransactionReceipt,
 	useChainId,
 	useAccountEffect,
+	useAccount,
 	useWatchContractEvent,
-	useReadContract,
-	useContractReads,
-	useContractRead
+	useReadContract
 } from 'wagmi';
+import { readContract } from '@wagmi/core';
 import { type UseAccountReturnType } from 'wagmi';
 import contractABI from './TravelVRFV2Plus.json';
 import { Loading } from '@/components/loading';
 import { useState, useEffect } from 'react';
 import { useToast } from '@/components/ui/use-toast';
 import { ToastAction } from '@/components/ui/toast';
-import { request } from 'http';
+import { wagmiCoreConfig } from '@/config/config';
 
-export const RollDice = () => {
+type Address = `0x${string}`;
+
+type RequestStatusType = {
+	requester: Address;
+	fulfilled: boolean;
+	randomWord: bigint;
+	dice: number;
+	paid: bigint;
+	timestamp: bigint;
+};
+
+export const RollDice = ({ onDiceChange }: { onDiceChange: Function }) => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [loadingText, setLoadingText] = useState('');
-	const [dice, setDice] = useState(0); // 保存最新的dice值
+	const [diceNumber, setDiceNumber] = useState(0); // 保存最新的dice值
 	const { toast } = useToast();
 
 	const { data: hash, writeContract, writeContractAsync } = useWriteContract();
 	const chainId = useChainId();
-	console.log('blockchainID', chainId);
+	const account = useAccount();
+	// console.log('blockchainID', chainId, account.address);
 
-	let intervalId: number;
+	let intervalId: number | NodeJS.Timeout;
 
 	// VRF contract address
-	let vrfContractAddress: `0x${string}`;
+	let vrfContractAddress: Address;
 	switch (String(chainId)) {
 		case '421614':
 			vrfContractAddress = '0x4560Ce3f145bA20A176961E0500235eccD6C7FdD';
@@ -45,6 +57,14 @@ export const RollDice = () => {
 		default:
 			vrfContractAddress = '0x1b10AbF4a94AB96a4CDefE8B6Df08DD6A9e9A6b5';
 	}
+
+	// 调用自定义 Hook
+	// const request = readContract(wagmiCoreConfig, {
+	// 	abi: contractABI.abi,
+	// 	address: vrfContractAddress,
+	// 	functionName: 'getRequestIds',
+	// 	args: ['0x797F3E3AcAac209847a9aa572D394D1b5cce4015']
+	// });
 
 	useAccountEffect({
 		onConnect(data) {
@@ -65,74 +85,81 @@ export const RollDice = () => {
 	// 		return toast({
 	// 			title: 'random dice' + logs
 	// 		});
+	// 	},
+	// 	onError(error) {
+	// 		console.log('Error', error);
 	// 	}
 	// });
 
 	const GetRandom = async () => {
 		try {
-			const result = await writeContractAsync({
+			const resultHash = await writeContractAsync({
 				address: vrfContractAddress,
 				abi: contractABI.abi,
 				functionName: 'requestRandomWords',
 				value: parseEther('0.01')
 			});
-			console.log(result);
+			console.log(resultHash, '这个是返回的结果是交易哈希🤣');
 			setIsLoading(true);
 			setLoadingText('生成随机数中。。。');
+			// 请求列表
+			const resultIDList = await readContract(wagmiCoreConfig, {
+				abi: contractABI.abi,
+				address: vrfContractAddress,
+				functionName: 'getRequestIds',
+				args: [account.address]
+			});
+			// console.log(resultIDList);
+			intervalId = setInterval(() => {
+				// @ts-ignore
+				pollDice(resultIDList[resultIDList.length - 1]);
+			}, 1000); // 每秒轮询一次
 		} catch (error) {
 			console.log(error);
 		}
 	};
 
 	// 定义轮询函数
-	async function pollDice() {
-		// const {
-		// 	data: requestStatus,
-		// 	error,
-		// 	isPending
-		// }
+	async function pollDice(requestID: Address) {
 		console.log('www');
 		try {
-			console.log('111');
-			// const requestStatus = useReadContract({
-			// 	address: vrfContractAddress,
-			// 	abi: contractABI.abi,
-			// 	functionName: 'getRequestStatus',
-			// 	// args: [requestId]
-			// 	args: [
-			// 		// 'df6c6d3efd581b26f26f35cdea02f21b741c6e215e2579a6d291abe7ce6d0cdf'
-			// 		'108492930318908305654512126985601496615628550396753277270371717329412884530226'
-			// 	]
-			// value: parseEther('0.01')
-			// });
-			const request = useContractRead({
-				abi: contractABI.abi,
-				address: vrfContractAddress,
-				functionName: 'getRequestIds',
-				args: ['0x797F3E3AcAac209847a9aa572D394D1b5cce4015']
-			});
-			console.log('middle', request);
-			const requestStatus = useReadContract({
+			const result = (await readContract(wagmiCoreConfig, {
 				abi: contractABI.abi,
 				address: vrfContractAddress,
 				functionName: 'getRequestStatus',
-				args: [
-					// '108492930318908305654512126985601496615628550396753277270371717329412884530226'
-					'0xdf6c6d3efd581b26f26f35cdea02f21b741c6e215e2579a6d291abe7ce6d0cdf'
-				]
-			});
-			console.log('222');
-			if (requestStatus !== null) {
-				// 如果查询结果不为 null，表示查到了结果，更新状态并停止轮询
-				console.log(requestStatus, 'l,,', requestStatus);
-				// setDice(queryResult);
-				// setIsLoading(false);
-				// clearInterval(intervalId); // 停止轮询
-				// onClick={GetRandom}
-				// '0xdf6c6d3efd581b26f26f35cdea02f21b741c6e215e2579a6d291abe7ce6d0cdf'
-				// )
+				args: [requestID]
+			})) as [Address, boolean, bigint, number, bigint, bigint];
+			const [requester, fulfilled, randomWord, dice, paid, timestamp] = result;
+			const requestStatus: RequestStatusType = {
+				requester,
+				fulfilled,
+				randomWord,
+				dice,
+				paid,
+				timestamp
+			};
+
+			if (requestStatus.fulfilled == true) {
+				// 如果fulfilled为true，表示vrf已经返回
+				setDiceNumber(requestStatus.dice);
+				setIsLoading(false);
+				console.log(diceNumber, 'diceNumber');
+				clearInterval(intervalId); // 停止轮询
+				toast({
+					title: 'Roll Dice successfully 🎉',
+					description: (
+						<div className="text-lg font-semibold text-gray-700">
+							The Dice Number is
+							<span className="text-4xl font-bold text-blue-500">
+								{diceNumber}
+							</span>
+						</div>
+					)
+				});
+				for (let i = 0; i < diceNumber; i++) {
+					onDiceChange(1);
+				}
 			}
-			console.log('sss');
 		} catch (error) {
 			console.log(error);
 		}
@@ -141,7 +168,16 @@ export const RollDice = () => {
 	return (
 		<div>
 			<div
-				onClick={pollDice}
+				// onClick={() =>
+				// 	pollDice(
+				// 		// '0xdf6c6d3efd581b26f26f35cdea02f21b741c6e215e2579a6d291abe7ce6d0cdf'
+				// 		'53451079860721686341348306905162466791097797790594216056973463453765963746680'
+				// 	)
+				// }
+				// onClick={GetRandom}
+				onClick={() => {
+					onDiceChange(Math.floor(Math.random() * 6) + 1);
+				}}
 				style={{ zIndex: 6 }}
 				className={cn(
 					'dice-button !z-6 absolute left-1/2 top-1/2 -translate-x-20 -translate-y-[120%]'
