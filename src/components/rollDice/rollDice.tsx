@@ -35,7 +35,7 @@ type RequestStatusType = {
 export const RollDice = ({ onDiceChange }: { onDiceChange: Function }) => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [loadingText, setLoadingText] = useState('');
-	const [diceNumber, setDiceNumber] = useState(0); // 保存最新的dice值
+	const [diceNumber, setDiceNumber] = useState(1); // 保存最新的dice值
 	const { toast } = useToast();
 
 	const { data: hash, writeContract, writeContractAsync } = useWriteContract();
@@ -75,21 +75,21 @@ export const RollDice = ({ onDiceChange }: { onDiceChange: Function }) => {
 		}
 	});
 
-	// useWatchContractEvent({
-	// 	address: vrfContractAddress,
-	// 	abi: contractABI.abi,
-	// 	eventName: 'RequestFulfilled',
-	// 	onLogs(logs) {
-	// 		console.log('New logs!', logs);
-	// 		setIsLoading(false);
-	// 		return toast({
-	// 			title: 'random dice' + logs
-	// 		});
-	// 	},
-	// 	onError(error) {
-	// 		console.log('Error', error);
-	// 	}
-	// });
+	useWatchContractEvent({
+		address: vrfContractAddress,
+		abi: contractABI.abi,
+		eventName: 'RequestFulfilled',
+		onLogs(logs) {
+			console.log('New logs!', logs);
+			setIsLoading(false);
+			return toast({
+				title: 'random dice' + logs
+			});
+		},
+		onError(error) {
+			console.log('Error', error);
+		}
+	});
 
 	const GetRandom = async () => {
 		try {
