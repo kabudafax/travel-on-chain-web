@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 // import { useAccountEffect, useContractRead } from 'wagmi'
 // import {contractConfig, points} from '@/config/NFT-contract.js'
-import GameCanvas from '@/app/journey/game.ts';
+import GameCanvas from '@/app/journey/game';
 import tempale1 from '@/../public/tempale1.png';
 import tempale2 from '@/../public/tempale2.png';
 // import single4 from '@/../public/single4.png';
@@ -68,7 +68,9 @@ export default function Game() {
 	// });
 	// const gridcanvasRef = useRef(null);
 	// const cordinateCanvasRef = useRef(null);
-	const start = localStorage.getItem('currentPosition') ? parseInt(localStorage.getItem('currentPosition'),10) : 0;
+	const start = localStorage.getItem('currentPosition')
+		? parseInt(localStorage.getItem('currentPosition'), 10)
+		: 0;
 	// if (typeof window !== 'undefined') {
 	// 	start =
 	// 		window.localStorage.getItem('lastIndex') !== null &&
@@ -314,23 +316,6 @@ export default function Game() {
 						}}
 					></canvas>
 				</div>
-				{/* <div
-					style={{ zIndex: 6 }}
-					className={cn(
-						'dice-button !z-6 absolute left-1/2 top-1/2 -translate-x-20 -translate-y-[120%]'
-					)}
-				>
-					<div className="scene">
-						<div className="cube" onClick={() => go()}>
-							<div className="face front">1</div>
-							<div className="face back">2</div>
-							<div className="face right">3</div>
-							<div className="face left">4</div>
-							<div className="face top">5</div>
-							<div className="face bottom">6</div>
-						</div>
-					</div>
-				</div> */}
 				<RollDice onDiceChange={go} />
 				<div className="flex grow justify-center">
 					<div className=" size-12 w-max  text-white" style={{ fontSize: 24 }}>
