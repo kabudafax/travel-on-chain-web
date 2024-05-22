@@ -68,7 +68,7 @@ export default function Game() {
 	// });
 	// const gridcanvasRef = useRef(null);
 	// const cordinateCanvasRef = useRef(null);
-	const start = localStorage.getItem('currentPosition') ? parseInt(localStorage.getItem('currentPosition'),10) : 0;
+	const start = localStorage.getItem('currentPosition') ? parseInt(localStorage.getItem('currentPosition') as string,10) : 0;
 	// if (typeof window !== 'undefined') {
 	// 	start =
 	// 		window.localStorage.getItem('lastIndex') !== null &&
@@ -76,7 +76,7 @@ export default function Game() {
 	// 			? localStorage.getItem('lastIndex')
 	// 			: 0;
 	// }
-	const { isShow, setIsShow } = useModalStore();
+	const { isShow, setIsShow, setRenderCallback } = useModalStore();
 
 	function generateRoutes(
 		start: { x: number; y: number; center: { x: number; y: number } },
@@ -120,9 +120,16 @@ export default function Game() {
 
 	function drawBoard(routes: Routes) {
 		const context = canvasRef.current?.getContext('2d');
-		context.fillStyle = 'rgb(250,229,208)'; // 设置方块的颜色
 
-		routes.forEach((route) => {
+		// 获取走过的点位的缓存
+		const mintedPoint = localStorage.getItem('mintedPoint') ? (JSON.parse(localStorage.getItem('mintedPoint') as string)) : []
+		routes.forEach((route,index) => {
+			if(mintedPoint.includes(index)){
+				console.log('需要绘制成mint过的样式');
+				context.fillStyle = 'rgb(248,63,63)'; // 设置方块的颜色
+			}else{
+				context.fillStyle = 'rgb(250,229,208)'; // 设置方块的颜色
+			}
 			context.save(); // 保存当前的绘图状态
 			context.translate(route.x, route.y); // 将坐标原点移动到方块的位置
 			context.rotate(-Math.PI * 0.2); // 旋转45度
@@ -223,6 +230,10 @@ export default function Game() {
 				imgSingle.src = img.src;
 			});
 			drawBoard(routes);
+			// 保存重新绘制的函数到store里面
+			setRenderCallback(()=>{
+				drawBoard(routes)
+			})
 		}
 		if (animateCanvasRef?.current) {
 			const userIcon = new Image();

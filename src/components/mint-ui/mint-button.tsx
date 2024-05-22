@@ -7,11 +7,11 @@ import { ToastAction } from '@/components/ui/toast';
 import { Loading } from '@/components/loading';
 import { useModalStore } from '@/store/useModalStore';
 
-import { useWriteContract, useWaitForTransactionReceipt } from 'wagmi'
+import { useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
 
-const sleep = (time: number) => (new Promise(r => setTimeout(r, time)))
+const sleep = (time: number) => (new Promise(r => setTimeout(r, time)));
 
-const abi = [{"type":"function","name":"mintNft","inputs":[],"outputs":[],"stateMutability":"nonpayable"}]
+const abi = [{ 'type': 'function', 'name': 'mintNft', 'inputs': [], 'outputs': [], 'stateMutability': 'nonpayable' }];
 
 // sepolia
 const contractAddress = '0x5EcBC930C89AA39BB57534271324A4Cd6B81d4d7';
@@ -25,9 +25,9 @@ export const MintButton = ({ metaData, img }: PinataMetaData) => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [loadingText, setLoadingText] = useState('');
 	const { toast } = useToast();
-	const { isShow, setIsShow } = useModalStore();
+	const { isShow, setIsShow, renderCallback } = useModalStore();
 
-	const [cid, setCid] = useState("");
+	const [cid, setCid] = useState('');
 
 	// 链上交互 START
 	const { data: hash, error, isPending, writeContract } = useWriteContract();
@@ -40,24 +40,26 @@ export const MintButton = ({ metaData, img }: PinataMetaData) => {
 		console.log(isConfirming);
 		console.log(isConfirmed);
 		if (isPending) {
-			setLoadingText('NFT上链中')
+			setLoadingText('NFT上链中');
 		} else if (isConfirmed) {
-			setLoadingText('交易已完成')
-			mintFinished(null)
+			setLoadingText('交易已完成');
+			// 交易完成 需要保存绘制的点 然后调用重新渲染的函数
+			savePoint();
+			mintFinished(null);
 		} else if (isConfirming) {
 			// 交易确认中
-			setLoadingText('交易确认中')
-			setTimeout(()=>{
-				mintFinished(null)
-			},3000)
+			setLoadingText('交易确认中');
+			setTimeout(() => {
+				mintFinished(null);
+			}, 3000);
 		} else if (error) {
 			console.log(error);
-			setLoadingText("NFT上链失败：" + error.name)
-			mintFinished(error.name)
+			setLoadingText('NFT上链失败：' + error.name);
+			mintFinished(error.name);
 		}
 
-	}, [isPending, error, isConfirming, isConfirmed])
-	// 链上交互 END 
+	}, [isPending, error, isConfirming, isConfirmed]);
+	// 链上交互 END
 
 	const uploadFile = async () => {
 		const filePath = img;
@@ -67,12 +69,12 @@ export const MintButton = ({ metaData, img }: PinataMetaData) => {
 		const buffer = await fileStream.arrayBuffer();
 		const file = new File([buffer], filePath.split('/').pop() || 'image', { type });
 		const data = new FormData();
-		data.set("file", file);
-		data.set("metadata", metaData);
+		data.set('file', file);
+		data.set('metadata', metaData);
 		console.log('START upload');
-		const res = await fetch("/api/files", {
-			method: "POST",
-			body: data,
+		const res = await fetch('/api/files', {
+			method: 'POST',
+			body: data
 		});
 		const resData = await res.json();
 		setCid(resData.IpfsHash);
@@ -81,27 +83,29 @@ export const MintButton = ({ metaData, img }: PinataMetaData) => {
 
 	const handleMint = async () => {
 		setIsLoading(true);
-		setLoadingText('NFT数据上传中...')
+		setLoadingText('NFT数据上传中...');
+		savePoint();
+		await sleep(3000);
+		return mintFinished(1);
 		try {
 			await uploadFile();
 			await sleep(3000);
 			// 获取cid 保存至区块链中
-			setLoadingText('NFT数据上链中...')
+			setLoadingText('NFT数据上链中...');
 			writeContract({
 				abi,
 				address: contractAddress,
-				functionName: 'mintNft',
+				functionName: 'mintNft'
 				// args: [cid],
-			})
-		}
-		catch (e) {
-			return mintFinished(e)
+			});
+		} catch (e) {
+			return mintFinished(e);
 		}
 
 	};
 
 	const mintFinished = (error: any) => {
-		setLoadingText('')
+		setLoadingText('');
 		setIsShow(false);
 		setIsLoading(false);
 		if (error) {
@@ -114,27 +118,41 @@ export const MintButton = ({ metaData, img }: PinataMetaData) => {
 				description: (
 					<a
 						href={`https://sepolia.etherscan.io/tx/${hash}`}
-						className="hover:underline"
-						target="_blank"
+						className='hover:underline'
+						target='_blank'
 					>
 						View on explorer 🔗
 					</a>
 				),
-				action: <ToastAction altText="Confirm">Confirm ✨</ToastAction>
+				action: <ToastAction altText='Confirm'>Confirm ✨</ToastAction>
 			});
 		}
-	}
+	};
+
+	const savePoint = () => {
+		const mintedPoint = localStorage.getItem('mintedPoint') ? (JSON.parse(localStorage.getItem('mintedPoint') as string)) : [];
+		console.log('mintedPoint', mintedPoint);
+		let curIndex = localStorage.getItem('currentPosition');
+		if (curIndex) {
+			curIndex = parseInt(curIndex, 10);
+			if (!mintedPoint.includes(curIndex)) {
+				mintedPoint.push(curIndex);
+				window.localStorage.setItem('mintedPoint', JSON.stringify(mintedPoint));
+			}
+		}
+		renderCallback && renderCallback()
+	};
 
 	return (
 		<div>
 			<Button
-				variant="premium"
-				className="mt-4 rounded-full p-4  font-semibold md:p-6 md:text-lg"
+				variant='premium'
+				className='mt-4 rounded-full p-4  font-semibold md:p-6 md:text-lg'
 				onClick={handleMint}
 			>
 				Start Mint!
 			</Button>
 			{isLoading && <Loading loadingText={loadingText} />}
 		</div>
-	)
-}
+	);
+};
