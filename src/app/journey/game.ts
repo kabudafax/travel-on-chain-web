@@ -6,6 +6,7 @@ export default class GameCanvas {
 	passRoutes: any[] = [];
 	options: any;
 	manPic: string;
+
 	constructor(options) {
 		this.options = options;
 		this.ctx = null;
@@ -21,6 +22,7 @@ export default class GameCanvas {
 		this.img = new Image();
 		this.curIndex = options.currentIndex ?? 0;
 	}
+
 	initCanvas() {
 		let canvas = document.getElementById(this.options.id);
 		// console.log(this.dpr, 'this.dpr');
@@ -30,6 +32,7 @@ export default class GameCanvas {
 		this.ctx.scale(this.dpr, this.dpr);
 		// this.drawInitialPath();
 	}
+
 	/**
 	 * @Author: yuyongxing
 	 * @param {*}
@@ -68,6 +71,7 @@ export default class GameCanvas {
 			this.drawPoint(point.x, point.y, '#bbb');
 		}
 	}
+
 	/**
 	 * @Author: yuyongxing
 	 * @param {*} routes
@@ -84,6 +88,7 @@ export default class GameCanvas {
 			return item;
 		});
 	}
+
 	/**
 	 * @Author: yuyongxing
 	 * @param {*} x
@@ -105,6 +110,7 @@ export default class GameCanvas {
 		this.ctx.fill();
 		this.ctx.closePath();
 	}
+
 	/**
 	 * @Author: yuyongxing
 	 * @param {*} start
@@ -126,6 +132,7 @@ export default class GameCanvas {
 		this.ctx.stroke();
 		this.ctx.closePath();
 	}
+
 	/**
 	 * @Author: yuyongxing
 	 * @param {*} start
@@ -137,15 +144,17 @@ export default class GameCanvas {
 	 * @Description: 开始两个坐标点之间的动画
 	 */
 	animate(index: number): Promise<void> {
+		console.log(index);
 		return new Promise(async (resolve) => {
 			this.curIndex =
 				index + this.curIndex == this.routes.length ? 0 : index + this.curIndex;
 			console.log(this.curIndex, 'this.curIndex');
-			window.localStorage.setItem('currentPosition',this.curIndex);
+			window.localStorage.setItem('currentPosition', this.curIndex);
+
 			const startPoint =
 				this.routes[
 					this.curIndex === 0 ? this.routes.length - 1 : this.curIndex - 1
-				].center;
+					].center;
 			const endPoint = this.routes[this.curIndex].center;
 
 			let xStep = (endPoint.x - startPoint.x) / 20;
