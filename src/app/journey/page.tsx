@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 // import { useAccountEffect, useContractRead } from 'wagmi'
 // import {contractConfig, points} from '@/config/NFT-contract.js'
-import GameCanvas from '@/app/journey/game.ts';
+import GameCanvas from '@/app/journey/game';
 import tempale1 from '@/../public/tempale1.png';
 import tempale2 from '@/../public/tempale2.png';
 // import single4 from '@/../public/single4.png';
@@ -68,7 +68,9 @@ export default function Game() {
 	// });
 	// const gridcanvasRef = useRef(null);
 	// const cordinateCanvasRef = useRef(null);
-	const start = localStorage.getItem('currentPosition') ? parseInt(localStorage.getItem('currentPosition') as string,10) : 0;
+	const start = localStorage.getItem('currentPosition')
+		? parseInt(localStorage.getItem('currentPosition') as string, 10)
+		: 0;
 	// if (typeof window !== 'undefined') {
 	// 	start =
 	// 		window.localStorage.getItem('lastIndex') !== null &&
@@ -122,12 +124,14 @@ export default function Game() {
 		const context = canvasRef.current?.getContext('2d');
 
 		// 获取走过的点位的缓存
-		const mintedPoint = localStorage.getItem('mintedPoint') ? (JSON.parse(localStorage.getItem('mintedPoint') as string)) : []
-		routes.forEach((route,index) => {
-			if(mintedPoint.includes(index)){
+		const mintedPoint = localStorage.getItem('mintedPoint')
+			? JSON.parse(localStorage.getItem('mintedPoint') as string)
+			: [];
+		routes.forEach((route, index) => {
+			if (mintedPoint.includes(index)) {
 				console.log('需要绘制成mint过的样式');
 				context.fillStyle = 'rgb(248,63,63)'; // 设置方块的颜色
-			}else{
+			} else {
 				context.fillStyle = 'rgb(250,229,208)'; // 设置方块的颜色
 			}
 			context.save(); // 保存当前的绘图状态
@@ -231,9 +235,9 @@ export default function Game() {
 			});
 			drawBoard(routes);
 			// 保存重新绘制的函数到store里面
-			setRenderCallback(()=>{
-				drawBoard(routes)
-			})
+			setRenderCallback(() => {
+				drawBoard(routes);
+			});
 		}
 		if (animateCanvasRef?.current) {
 			const userIcon = new Image();
@@ -325,23 +329,6 @@ export default function Game() {
 						}}
 					></canvas>
 				</div>
-				{/* <div
-					style={{ zIndex: 6 }}
-					className={cn(
-						'dice-button !z-6 absolute left-1/2 top-1/2 -translate-x-20 -translate-y-[120%]'
-					)}
-				>
-					<div className="scene">
-						<div className="cube" onClick={() => go()}>
-							<div className="face front">1</div>
-							<div className="face back">2</div>
-							<div className="face right">3</div>
-							<div className="face left">4</div>
-							<div className="face top">5</div>
-							<div className="face bottom">6</div>
-						</div>
-					</div>
-				</div> */}
 				<RollDice onDiceChange={go} />
 				<div className="flex grow justify-center">
 					<div className=" size-12 w-max  text-white" style={{ fontSize: 24 }}>

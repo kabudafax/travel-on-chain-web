@@ -1,11 +1,12 @@
 'use client';
 
-import Link from 'next/link';
 import TypewriterComponent from 'typewriter-effect';
 import { Button } from '@/components/ui/button';
 import ReactECharts from 'echarts-for-react';
 import { useEffect, useRef } from 'react';
 import ChinaMap from '@/components/map';
+import NightEarth from '@/components/night-earth/night-earth';
+// import '../../public/cesium/Widgets/widgets.css';
 
 export const Hreo = () => {
 	const mapRef = useRef(null);
@@ -31,7 +32,6 @@ export const Hreo = () => {
 				Create your own Composable NFTs.
 			</div>
 			<div>
-				{/* <Link href="/mint"> */}
 				<Button
 					variant="premium"
 					className="rounded-full p-4 font-semibold md:p-6 md:text-lg"
@@ -39,15 +39,15 @@ export const Hreo = () => {
 				>
 					Lottery
 				</Button>
-				{/* </Link> */}
 
-				<ChinaMap
+				{/* <ChinaMap
 					ref={mapRef}
 					data={[
 						{ name: '北京', value: 2000 },
 						{ name: '上海', value: 4000 }
 					]}
-				/>
+				/> */}
+				{/* <NightEarth /> */}
 			</div>
 		</div>
 	);

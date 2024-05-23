@@ -4,6 +4,8 @@ import './globals.css';
 import { Providers } from './provider';
 import { Toaster } from '@/components/ui/toaster';
 
+import '../../public/cesium/Widgets/widgets.css';
+
 import * as china from '@/components/china.json';
 
 const inter = Inter({ subsets: ['latin'] });

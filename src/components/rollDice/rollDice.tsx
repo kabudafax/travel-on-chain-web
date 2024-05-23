@@ -182,18 +182,64 @@ export const RollDice = ({ onDiceChange }: { onDiceChange: Function }) => {
 					}
 				}}
 				style={{ zIndex: 6 }}
-				className={cn(
-					'dice-button !z-6 absolute left-1/2 top-1/2 -translate-x-20 -translate-y-[120%]'
-				)}
+				className={cn('dice-button !z-6 absolute left-[30%] top-[40%] ')}
 			>
-				<div className="scene">
-					<div className="cube">
-						<div className="face front">1</div>
-						<div className="face back">2</div>
-						<div className="face right">3</div>
-						<div className="face left">4</div>
-						<div className="face top">5</div>
-						<div className="face bottom">6</div>
+				<div id="scene">
+					<div id="dice">
+						{/* <!-- front --> */}
+						<div className="side front">
+							<div className="dot center"></div>
+						</div>
+						<div className="side front inner"></div>
+
+						{/* <!-- top --> */}
+						<div className="side top">
+							<div className="dot dtop dleft"></div>
+							<div className="dot dbottom dright"></div>
+						</div>
+						<div className="side top inner"></div>
+
+						{/* <!-- right --> */}
+						<div className="side right">
+							<div className="dot dtop dleft"></div>
+							<div className="dot center"></div>
+							<div className="dot dbottom dright"></div>
+						</div>
+						<div className="side right inner"></div>
+
+						{/* <!-- left --> */}
+						<div className="side left">
+							<div className="dot dtop dleft"></div>
+							<div className="dot dtop dright"></div>
+							<div className="dot dbottom dleft"></div>
+							<div className="dot dbottom dright"></div>
+						</div>
+						<div className="side left inner"></div>
+
+						{/* <!-- bottom --> */}
+						<div className="side bottom">
+							<div className="dot center"></div>
+							<div className="dot dtop dleft"></div>
+							<div className="dot dtop dright"></div>
+							<div className="dot dbottom dleft"></div>
+							<div className="dot dbottom dright"></div>
+						</div>
+						<div className="side bottom inner"></div>
+
+						{/* <!-- back --> */}
+						<div className="side back">
+							<div className="dot dtop dleft"></div>
+							<div className="dot dtop dright"></div>
+							<div className="dot dbottom dleft"></div>
+							<div className="dot dbottom dright"></div>
+							<div className="dot center delft"></div>
+							<div className="dot center dright"></div>
+						</div>
+						<div className="side back inner"></div>
+						{/* cover */}
+						<div className="side cover x"></div>
+						<div className="side cover y"></div>
+						<div className="side cover z"></div>
 					</div>
 				</div>
 			</div>
