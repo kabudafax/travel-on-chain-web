@@ -1,0 +1,21 @@
+.congrats {
+  font-size: 4em;
+  font-weight: bold;
+  background: linear-gradient(90deg, #ff99cc, #ff66ff, #66ccff, #66ff99);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: gradient 3s infinite;
+  text-shadow: 3px 3px 0px rgba(255, 255, 255, 0.8), 6px 6px 0px rgba(0, 0, 0, 0.1);
+  border: 5px solid rgba(248, 195, 233, 0.7);
+  box-shadow: 0px 0px 10px rgba(255, 105, 180, 0.4),
+  0px 0px 20px rgba(255, 182, 193, 0.3);
+  padding: 20px 30px;
+  border-radius: 20px;
+}
+
+@keyframes gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
