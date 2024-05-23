@@ -1,53 +1,9 @@
-// .dice-button {
-//   // position: relative;
-//   width: 100px;
-//   height: 100px;
-//   perspective: 1000px;
-//   cursor: pointer;
-// }
-
-// .dice {
-//   width: 100%;
-//   height: 100%;
-//   background-color: #4CAF50;
-//   color: white;
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   font-size: 20px;
-//   font-weight: bold;
-//   border-radius: 10px;
-//   transform-style: preserve-3d;
-//   transition: transform 0.5s;
-// }
-
-// .dice-button:hover .dice {
-//   transform: rotateX(360deg) rotateY(360deg);
-// }
-
-// .dice::before,
-// .dice::after {
-//   content: "";
-//   position: absolute;
-//   width: 100%;
-//   height: 100%;
-//   background-color: #388E3C;
-//   border-radius: 10px;
-// }
-
-// .dice::before {
-//   transform: rotateX(90deg) translateZ(50px);
-// }
-
-// .dice::after {
-//   transform: rotateY(90deg) translateZ(50px);
-// }
 
 
 // .scene {
-//   width: 100px;
-//   height: 100px;
-//   perspective: 300px;
+//   width: 70px; /* 每个面35px的骰子 */
+//   height: 70px; /* 每个面35px的骰子 */
+//   perspective: 210px; /* 修改为适当的透视值 */
 // }
 
 // .cube {
@@ -74,79 +30,170 @@
 
 // .face {
 //   position: absolute;
-//   width: 50px;
-//   height: 50px;
+//   width: 70px; /* 每个面35px的骰子 */
+//   height: 70px; /* 每个面35px的骰子 */
 //   background-color: rgba(255, 255, 255, 0.9);
 //   border: 2px solid #ccc;
-//   font-size: 40px;
+//   font-size: 14px; /* 调整为适当的字体大小 */
 //   display: flex;
 //   justify-content: center;
 //   align-items: center;
 
-//   // 设置渐变背景
+//   // 渐变背景
 //   border-radius: 0.5rem; /* 或者你需要的值 */
 //   background: linear-gradient(to right, #3b82f6, #7c3aed);
 //   color: #fff;
-//   opacity: 0.5;
+//   opacity: 0.8;
 // }
 
-// .front  { transform: translateZ(100px); }
-// .back   { transform: rotateY( 180deg) translateZ(100px); }
-// .right  { transform: rotateY(  90deg) translateZ(100px); }
-// .left   { transform: rotateY( -90deg) translateZ(100px); }
-// .top    { transform: rotateX(  90deg) translateZ(100px); }
-// .bottom { transform: rotateX( -90deg) translateZ(100px); }
+// .front  { transform: translateZ(35px); }
+// .back   { transform: rotateY( 180deg) translateZ(35px); }
+// .right  { transform: rotateY(  90deg) translateZ(35px); }
+// .left   { transform: rotateY( -90deg) translateZ(35px); }
+// .top    { transform: rotateX(  90deg) translateZ(35px); }
+// .bottom { transform: rotateX( -90deg) translateZ(35px); }
 
-
-.scene {
-  width: 70px; /* 每个面35px的骰子 */
-  height: 70px; /* 每个面35px的骰子 */
-  perspective: 210px; /* 修改为适当的透视值 */
-}
-
-.cube {
-  width: 100%;
-  height: 100%;
+// real dice
+#scene {
   position: relative;
-  transform-style: preserve-3d;
-  transform: rotateX(-30deg) rotateY(45deg);
-  transition: transform 1s;
+  width: 50px;
+  perspective: 1200px;
 }
-
-.cube:hover {
-  animation: rotate 2s infinite linear;
-}
-
-@keyframes rotate {
-  from {
-    transform: rotateX(-30deg) rotateY(45deg);
-  }
-  to {
-    transform: rotateX(330deg) rotateY(405deg);
-  }
-}
-
-.face {
+#dice span {
   position: absolute;
-  width: 70px; /* 每个面35px的骰子 */
-  height: 70px; /* 每个面35px的骰子 */
-  background-color: rgba(255, 255, 255, 0.9);
-  border: 2px solid #ccc;
-  font-size: 14px; /* 调整为适当的字体大小 */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  // 渐变背景
-  border-radius: 0.5rem; /* 或者你需要的值 */
-  background: linear-gradient(to right, #3b82f6, #7c3aed);
-  color: #fff;
-  opacity: 0.8;
+  margin: 50px 0 0 50px;
+  display: block;
+  font-size: 2.5em;
+  padding: 10px;
+}
+#dice {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  transform-style: preserve-3d;
+  animation: spin 50s infinite linear;
+}
+#dice:hover {
+  animation-play-state: paused;
+}
+.side {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  background: #fff;
+  box-shadow: inset 0 0 10px #ccc;
+  border-radius: 10px;
+}
+.side.inner {
+  background: #ddd;
+  box-shadow: none;
+}
+#dice .cover {
+  background: #ddd;
+  box-shadow: none;
+}
+#dice .cover {
+  border-radius: 0;
+  transform: translateZ(0px);
+}
+#dice .cover.x {
+  transform: rotateY(90deg);
+}
+#dice .cover.z {
+  transform: rotateX(90deg);
+}
+#dice .front {
+  transform: translateZ(25px);
+}
+#dice .front.inner {
+  transform: translateZ(24px);
+}
+#dice .back {
+  transform: rotateX(-180deg) translateZ(25px);
+}
+#dice .back.inner {
+  transform: rotateX(-180deg) translateZ(24px);
+}
+#dice .right {
+  transform: rotateY(90deg) translateZ(25px);
+}
+#dice .right.inner {
+  transform: rotateY(90deg) translateZ(24px);
+}
+#dice .left {
+  transform: rotateY(-90deg) translateZ(25px);
+}
+#dice .left.inner {
+  transform: rotateY(-90deg) translateZ(24px);
+}
+#dice .top {
+  transform: rotateX(90deg) translateZ(25px);
+}
+#dice .top.inner {
+  transform: rotateX(90deg) translateZ(24px);
+}
+#dice .bottom {
+  transform: rotateX(-90deg) translateZ(25px);
+}
+#dice .bottom.inner {
+  transform: rotateX(-90deg) translateZ(24px);
+}
+.dot {
+  position: absolute;
+  width: 11.5px;
+  height: 11.5px;
+  border-radius: 5.5px;
+  background: #333;
+  box-shadow: 0 0 2.5px 2.5px #000000d2 inset;
+}
+.front .dot,
+.left .dot {
+  background: red;
+  box-shadow: inset 2.5px 0 5px rgb(236, 16, 16);
 }
 
-.front  { transform: translateZ(35px); }
-.back   { transform: rotateY( 180deg) translateZ(35px); }
-.right  { transform: rotateY(  90deg) translateZ(35px); }
-.left   { transform: rotateY( -90deg) translateZ(35px); }
-.top    { transform: rotateX(  90deg) translateZ(35px); }
-.bottom { transform: rotateX( -90deg) translateZ(35px); }
+.dot.center {
+  margin: 19px 0 0 19px;
+}
+.dot.dtop {
+  margin-top: 5px;
+}
+.dot.dleft {
+  margin-left: 33.5px;
+}
+.dot.dright {
+  margin-left: 5px;
+}
+.dot.dbottom {
+  margin-top: 33.5px;
+}
+.dot.center.dleft {
+  margin: 19px 0 0 5px;
+}
+.dot.center.dright {
+  margin: 19px 0 0 33.5px;
+}
+
+@keyframes spin {
+  0% {
+    transform: translateZ(-25px) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+  }
+  16% {
+    transform: translateZ(-25px) rotateX(180deg) rotateY(180deg) rotateZ(0deg);
+  }
+  33% {
+    transform: translateZ(-25px) rotateX(360deg) rotateY(90deg) rotateZ(180deg);
+  }
+  50% {
+    transform: translateZ(-25px) rotateX(360deg) rotateY(360deg) rotateZ(360deg);
+  }
+  66% {
+    transform: translateZ(-25px) rotateX(180deg) rotateY(360deg) rotateZ(270deg);
+  }
+  83% {
+    transform: translateZ(-25px) rotateX(270deg) rotateY(180deg) rotateZ(180deg);
+  }
+  100% {
+    transform: translateZ(-25px) rotateX(360deg) rotateY(360deg) rotateZ(360deg);
+  }
+}
