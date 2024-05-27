@@ -165,6 +165,65 @@ export const RollDice = ({ onDiceChange }: { onDiceChange: Function }) => {
 		}
 	}
 
+	// Dice roll animation
+	const handleDiceclick = () => {
+		document.getElementById('dice')!.addEventListener('click', async () => {
+			const dice: HTMLElement = document.getElementById('dice')!;
+
+			// dice.style.animation = '';
+			// dice.style.transition = 'transform 1s';
+			dice.style.removeProperty('animation');
+
+			// Generate random rotation angles
+			const randX = Math.floor(Math.random() * 12) * 90; // 0到11个90度
+			const randY = Math.floor(Math.random() * 12) * 90; // 0到11个90度
+			const randZ = Math.floor(Math.random() * 12) * 90; // 0到11个90度
+
+			// 指定最终展示的呈现的角度
+			// const rotateZ = Math.floor(Math.random() * 4) * 90;
+			// console.log(rotateZ, 'rotateZ');
+			// const rotateY = Math.floor(Math.random() * 4) * 90 - 40;
+			// console.log(rotateY, 'rotateY');
+
+			// Apply initial animation for tossing the dice
+			// dice.style.transition = "transform 2s cubic-bezier(0.25, 0.1, 0.25, 1)";
+			// dice.style.transition = "transform 2s cubic-bezier(.17,.6,.25,1.02)";
+			setTimeout(() => {
+				dice.style.transition = 'transform 2s cubic-bezier(.06,.69,.37,.91)';
+				dice.style.transform = `translateY(-300px) rotateX(${randX}deg) rotateY(${randY}deg) rotateZ(${randZ}deg)`;
+			}, 100);
+
+			// After the animation ends, reset to show the final 3D shape
+			setTimeout(() => {
+				// Keep the cube in the side view perspective
+				const rotateZ = Math.floor(Math.random() * 4) * 90;
+				console.log(rotateZ, 'rotateZ');
+				const rotateY = Math.floor(Math.random() * 4) * 90 - 40;
+				console.log(rotateY, 'rotateY');
+				// dice.style.transition = "transform 1s cubic-bezier(0.5, 0, 0.5, 1)";
+				dice.style.transition =
+					'transform 1.5s cubic-bezier(.82,-0.02,.92,.74)';
+				dice.style.transform = `translateY(0px) rotateX(-30deg) rotateY(${rotateY}deg) rotateZ(${rotateZ}deg)`;
+
+				// dice.style.transition = 'none';
+				dice.style.animation = 'spin 25s infinite linear';
+			}, 1500);
+
+			// chess move by dice steps
+			setTimeout(async () => {
+				const num = Math.floor(Math.random() * 6) + 1;
+				for (let index = 0; index < num; index++) {
+					await onDiceChange(1);
+				}
+			}, 3500);
+		});
+	};
+
+	useEffect(() => {
+		// handleDiceclick();
+		console.log('执行一次');
+	}, []);
+
 	return (
 		<div>
 			<div
@@ -175,71 +234,74 @@ export const RollDice = ({ onDiceChange }: { onDiceChange: Function }) => {
 				// 	)
 				// }
 				// onClick={GetRandom}
-				onClick={async () => {
-					const num = Math.floor(Math.random() * 6) + 1;
-					for (let index = 0; index < num; index++) {
-						await onDiceChange(1);
-					}
-				}}
+				// onClick={async () => {
+				// 	const num = Math.floor(Math.random() * 6) + 1;
+				// 	for (let index = 0; index < num; index++) {
+				// 		await onDiceChange(1);
+				// 	}
+				// }}
+				onClick={handleDiceclick}
 				style={{ zIndex: 6 }}
 				className={cn('dice-button !z-6 absolute left-[30%] top-[40%] ')}
 			>
 				<div id="scene">
-					<div id="dice">
-						{/* <!-- front --> */}
-						<div className="side front">
-							<div className="dot center"></div>
-						</div>
-						<div className="side front inner"></div>
+					<div id="cover">
+						<div id="dice">
+							{/* <!-- front --> */}
+							<div className="side front">
+								<div className="dot center"></div>
+							</div>
+							<div className="side front inner"></div>
 
-						{/* <!-- top --> */}
-						<div className="side top">
-							<div className="dot dtop dleft"></div>
-							<div className="dot dbottom dright"></div>
-						</div>
-						<div className="side top inner"></div>
+							{/* <!-- top --> */}
+							<div className="side top">
+								<div className="dot dtop dleft"></div>
+								<div className="dot dbottom dright"></div>
+							</div>
+							<div className="side top inner"></div>
 
-						{/* <!-- right --> */}
-						<div className="side right">
-							<div className="dot dtop dleft"></div>
-							<div className="dot center"></div>
-							<div className="dot dbottom dright"></div>
-						</div>
-						<div className="side right inner"></div>
+							{/* <!-- right --> */}
+							<div className="side right">
+								<div className="dot dtop dleft"></div>
+								<div className="dot center"></div>
+								<div className="dot dbottom dright"></div>
+							</div>
+							<div className="side right inner"></div>
 
-						{/* <!-- left --> */}
-						<div className="side left">
-							<div className="dot dtop dleft"></div>
-							<div className="dot dtop dright"></div>
-							<div className="dot dbottom dleft"></div>
-							<div className="dot dbottom dright"></div>
-						</div>
-						<div className="side left inner"></div>
+							{/* <!-- left --> */}
+							<div className="side left">
+								<div className="dot dtop dleft"></div>
+								<div className="dot dtop dright"></div>
+								<div className="dot dbottom dleft"></div>
+								<div className="dot dbottom dright"></div>
+							</div>
+							<div className="side left inner"></div>
 
-						{/* <!-- bottom --> */}
-						<div className="side bottom">
-							<div className="dot center"></div>
-							<div className="dot dtop dleft"></div>
-							<div className="dot dtop dright"></div>
-							<div className="dot dbottom dleft"></div>
-							<div className="dot dbottom dright"></div>
-						</div>
-						<div className="side bottom inner"></div>
+							{/* <!-- bottom --> */}
+							<div className="side bottom">
+								<div className="dot center"></div>
+								<div className="dot dtop dleft"></div>
+								<div className="dot dtop dright"></div>
+								<div className="dot dbottom dleft"></div>
+								<div className="dot dbottom dright"></div>
+							</div>
+							<div className="side bottom inner"></div>
 
-						{/* <!-- back --> */}
-						<div className="side back">
-							<div className="dot dtop dleft"></div>
-							<div className="dot dtop dright"></div>
-							<div className="dot dbottom dleft"></div>
-							<div className="dot dbottom dright"></div>
-							<div className="dot center delft"></div>
-							<div className="dot center dright"></div>
+							{/* <!-- back --> */}
+							<div className="side back">
+								<div className="dot dtop dleft"></div>
+								<div className="dot dtop dright"></div>
+								<div className="dot dbottom dleft"></div>
+								<div className="dot dbottom dright"></div>
+								<div className="dot center dleft"></div>
+								<div className="dot center dright"></div>
+							</div>
+							<div className="side back inner"></div>
+							{/* cover */}
+							<div className="side cover x"></div>
+							<div className="side cover y"></div>
+							<div className="side cover z"></div>
 						</div>
-						<div className="side back inner"></div>
-						{/* cover */}
-						<div className="side cover x"></div>
-						<div className="side cover y"></div>
-						<div className="side cover z"></div>
 					</div>
 				</div>
 			</div>

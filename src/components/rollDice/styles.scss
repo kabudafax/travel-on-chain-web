@@ -71,7 +71,9 @@
   width: 50px;
   height: 50px;
   transform-style: preserve-3d;
-  animation: spin 50s infinite linear;
+  transition: transform 1s;
+  // animation: spin 50s infinite linear;
+  // animation: spin 25s infinite linear;
 }
 #dice:hover {
   animation-play-state: paused;

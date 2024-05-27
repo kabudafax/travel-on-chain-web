@@ -20,6 +20,7 @@ import { RollDice } from '@/components/rollDice/rollDice';
 
 import Modal from '@/components/modal';
 import { useModalStore } from '@/store/useModalStore';
+// import Image from 'next/image';
 
 //向右x+50y+14;
 //向左x - 48 y-22;
@@ -301,16 +302,23 @@ export default function Game() {
 	// }
 
 	return (
-		<div className="h-full overflow-auto bg-[#111827]">
+		// bg-[#111827]
+		<div className="h-full overflow-auto  bg-[#81b1bb]">
 			<Modal show={isShow} onClose={() => setIsShow(false)} />
 
 			<div className="box flex">
 				<div
-					className="flex-shrink flex-grow-0 overflow-auto"
+					id="chess-board"
+					className="relative flex-shrink flex-grow-0 overflow-auto"
 					style={{ flexBasis: '70%' }}
 				>
 					<canvas
-						style={{ marginTop: 10, width: canvasWidth }}
+						style={{
+							marginTop: 10,
+							width: canvasWidth,
+							zIndex: 4,
+							position: 'relative'
+						}}
 						id="canvas"
 						ref={canvasRef}
 					></canvas>
@@ -321,13 +329,19 @@ export default function Game() {
 						style={{
 							position: 'absolute',
 							zIndex: 5,
-							// top: 10,
-							top: 82,
+							top: 10,
+							// top: 82,
 							left: 0,
 							right: 0,
 							width: canvasWidth
 						}}
 					></canvas>
+					<img
+						src="/assets/bg-journey.jpg"
+						alt="background-img for chess board"
+						className="absolute left-0 top-0  z-[2] w-full object-cover opacity-100"
+						style={{ marginTop: 10, width: canvasWidth }}
+					/>
 				</div>
 				<RollDice onDiceChange={go} />
 				<div className="flex grow justify-center">
