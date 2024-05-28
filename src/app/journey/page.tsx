@@ -31,31 +31,30 @@ const imgs = [tempale1, tempale2, panda];
 function right(point: Point) {
 	return {
 		x: point.x + 53,
-		y: point.y + 12
+		y: point.y + 12.8
 	};
 }
 
 function left(point: Point) {
 	return {
-		x: point.x - 48,
-		y: point.y + 22
+		x: point.x - 47.8,
+		y: point.y + 21.8
 	};
 }
 
 function up(point: Point) {
 	return {
-		x: point.x + 48,
-		y: point.y - 22
+		x: point.x + 47.5,
+		y: point.y - 21.8
 	};
 }
 
 function upLeft(point: Point) {
 	return {
-		x: point.x - 53,
-		y: point.y - 12
+		x: point.x - 53.3,
+		y: point.y - 12.6
 	};
 }
-
 export default function Game() {
 	const [canvasWidth, setCanvasWidth] = useState(0);
 	const canvasRef = useRef(null);
@@ -133,11 +132,11 @@ export default function Game() {
 				console.log('需要绘制成mint过的样式');
 				context.fillStyle = 'rgb(248,63,63)'; // 设置方块的颜色
 			} else {
-				context.fillStyle = 'rgb(250,229,208)'; // 设置方块的颜色
+				context.fillStyle = 'rgba(250,229,208,0.8)'; // 设置方块的颜色
 			}
 			context.save(); // 保存当前的绘图状态
 			context.translate(route.x, route.y); // 将坐标原点移动到方块的位置
-			context.rotate(-Math.PI * 0.2); // 旋转45度
+			context.rotate(-Math.PI * 0.19); // 旋转45度
 			context.transform(1, 0.2, 0.9, 1, 0, 0);
 			context.scale(1, 0.8); // 缩放y轴，使得形状变为菱形
 			context.fillRect(-35, -35, 48, 48); // 绘制方块
@@ -337,10 +336,14 @@ export default function Game() {
 						}}
 					></canvas>
 					<img
-						src="/assets/bg-journey.jpg"
+						src="/assets/chessbg.png"
 						alt="background-img for chess board"
 						className="absolute left-0 top-0  z-[2] w-full object-cover opacity-100"
-						style={{ marginTop: 10, width: canvasWidth }}
+						style={{
+							marginTop: 10,
+							width: canvasWidth - 50,
+							height: 728
+						}}
 					/>
 				</div>
 				<RollDice onDiceChange={go} />
