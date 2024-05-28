@@ -153,7 +153,7 @@ export default function NightEarth({ className }: { className: String }) {
 	// 处理点击事件，飞行+跳转
 	function handleClick() {
 		stopSpinGlobe();
-		var chinaPosition = Cesium.Cartesian3.fromDegrees(104.1954, 20.8617, 1000000); // 经度, 纬度, 高度
+		var chinaPosition = Cesium.Cartesian3.fromDegrees(104.1954, 20.8617, 10000000); // 经度, 纬度, 高度
 
 		viewer.camera.flyTo({
 			destination: chinaPosition,
