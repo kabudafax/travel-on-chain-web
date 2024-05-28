@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import ReactECharts from 'echarts-for-react';
 import { useEffect, useRef } from 'react';
 import ChinaMap from '@/components/map';
-import NightEarth from '@/components/night-earth/night-earth';
+// import NightEarth from '@/components/night-earth/night-earth';
 // import '../../public/cesium/Widgets/widgets.css';
 
 export const Hreo = () => {
@@ -32,13 +32,13 @@ export const Hreo = () => {
 				Create your own Composable NFTs.
 			</div>
 			<div>
-				<Button
-					variant="premium"
-					className="rounded-full p-4 font-semibold md:p-6 md:text-lg"
-					onClick={() => getNTF()}
-				>
-					Lottery
-				</Button>
+				{/*<Button*/}
+				{/*	variant="premium"*/}
+				{/*	className="rounded-full p-4 font-semibold md:p-6 md:text-lg pointer-events-auto"*/}
+				{/*	onClick={() => getNTF()}*/}
+				{/*>*/}
+				{/*	Lottery*/}
+				{/*</Button>*/}
 
 				{/* <ChinaMap
 					ref={mapRef}

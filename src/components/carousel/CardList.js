@@ -23,6 +23,7 @@ const CardList = ({ list, type = 'horizontal' }) => {
 	return (
 		<div
 			id="card-list"
+			className='pointer-events-auto'
 			style={{ flexDirection: type == 'horizontal' ? 'row' : 'column' }}
 		>
 			<Carousel
