@@ -154,7 +154,7 @@ export default class GameCanvas {
 			const startPoint =
 				this.routes[
 					this.curIndex === 0 ? this.routes.length - 1 : this.curIndex - 1
-					].center;
+				].center;
 			const endPoint = this.routes[this.curIndex].center;
 
 			let xStep = (endPoint.x - startPoint.x) / 20;

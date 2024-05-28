@@ -20,6 +20,7 @@ import { RollDice } from '@/components/rollDice/rollDice';
 
 import Modal from '@/components/modal';
 import { useModalStore } from '@/store/useModalStore';
+import FireworksCanvas from './fireworks';
 // import Image from 'next/image';
 
 //向右x+50y+14;
@@ -143,6 +144,19 @@ export default function Game() {
 			context.restore(); // 恢复原有的绘图状态
 		});
 	}
+	const fireworksRef = useRef();
+
+	const handleStart = () => {
+		if (fireworksRef.current) {
+			fireworksRef.current.startFireworks();
+		}
+	};
+
+	const handleStop = () => {
+		if (fireworksRef.current) {
+			fireworksRef.current.stopFireworks();
+		}
+	};
 
 	useEffect(() => {
 		const routes = generateRoutes(
@@ -335,6 +349,7 @@ export default function Game() {
 							width: canvasWidth
 						}}
 					></canvas>
+					<FireworksCanvas ref={fireworksRef} />
 					<img
 						src="/assets/chessbg.png"
 						alt="background-img for chess board"
@@ -348,7 +363,11 @@ export default function Game() {
 				</div>
 				<RollDice onDiceChange={go} />
 				<div className="flex grow justify-center">
-					<div className=" size-12 w-max  text-white" style={{ fontSize: 24 }}>
+					<div
+						className=" size-12 w-max  text-white"
+						style={{ fontSize: 24 }}
+						onClick={() => handleStart()}
+					>
 						MY NFTS
 					</div>
 				</div>
