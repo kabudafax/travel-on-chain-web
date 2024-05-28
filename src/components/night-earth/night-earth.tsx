@@ -153,63 +153,43 @@ export default function NightEarth({ className }: { className: String }) {
 	// 处理点击事件，飞行+跳转
 	function handleClick() {
 		stopSpinGlobe();
-		// 获取输入框元素
-		const inputElement: HTMLInputElement = document.querySelector(
-			'.cesium-geocoder-input'
-		)!;
+		var chinaPosition = Cesium.Cartesian3.fromDegrees(104.1954, 20.8617, 1000000); // 经度, 纬度, 高度
 
-		// 将输入框的值设置为 "china"
-		inputElement.value = 'china';
-
-		// 触发搜索事件（如果有的话）
-		inputElement.dispatchEvent(new Event('input'));
-		const searchButton: HTMLButtonElement = document.querySelector(
-			'.cesium-geocoder-searchButton'
-		)!;
-		// if (searchButton) {
-		//   searchButton.click();
-		// }
-
-		// 用promise
-		new Promise((resolve, reject) => {
-			// 如果搜索按钮存在，则绑定点击事件
-			if (searchButton) {
-				// @ts-ignore
-				searchButton.click();
-			} else {
-				// 如果搜索按钮不存在，则拒绝 Promise
-				reject('搜索按钮不存在');
-			}
-		}).then((resolve) => {
-			if (resolve) {
-				console.log('fly to');
-			}
-		});
-
-		setTimeout(() => {
-			router.push('/journey');
-			console.log('222');
-		}, 5000);
+		viewer.camera.flyTo({
+			destination: chinaPosition,
+			orientation: {
+				heading: Cesium.Math.toRadians(0.0),  // 方位角
+				pitch: Cesium.Math.toRadians(-90.0), // 俯仰角
+				roll: 0.0                            // 滚转角
+			},
+			complete:()=>{
+				console.log('flyTo 结束');
+				setTimeout(() => {
+					router.push('/journey');
+				}, 3000);
+			},
+			duration: 3 // 飞行到目标点所需的时间（秒）
+		})
 	}
 
 	return (
 		<div className={cn('', className)}>
 			<div
-				id="cesiumContainer"
+				id='cesiumContainer'
 				ref={cesiumContainerRef}
 				style={{ width: '100%', height: '100vh' }}
 			/>
 			{/* <div id="cesiumContainer" ref={cesiumContainerRef} style={{ width: "50%", height: "50vh" }} /> */}
 			<button
-				className="rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 px-1 py-1 text-xs font-bold text-white shadow-md transition duration-300 ease-in-out hover:from-purple-500 hover:to-blue-600 hover:shadow-lg"
+				className='rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 px-1 py-1 text-xs font-bold text-white shadow-md transition duration-300 ease-in-out hover:from-purple-500 hover:to-blue-600 hover:shadow-lg'
 				style={{
 					position: 'absolute',
 					zIndex: 3,
 					pointerEvents: 'visible',
 					top: '60px',
 					right: '40px',
-					width: '50px',
-					height: '50px'
+					height: '50px',
+					padding: '0 20px'
 				}}
 				onClick={() => {
 					handleClick();
