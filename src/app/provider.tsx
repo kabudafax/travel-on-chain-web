@@ -13,7 +13,7 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
 	return (
 		<WagmiProvider config={config}>
 			<QueryClientProvider client={queryClient}>
-				<RainbowKitProvider modalSize="compact">
+				<RainbowKitProvider modalSize="compact" locale="en">
 					<MessagesProvider>{children}</MessagesProvider>
 				</RainbowKitProvider>
 			</QueryClientProvider>

@@ -17,11 +17,11 @@ export const Hreo = () => {
 	return (
 		<div className="space-y-5 pt-36 text-center font-bold text-white">
 			<div className="space-y-5 text-4xl font-extrabold sm:text-5xl md:text-6xl lg:text-7xl">
-				<h1>Travel in China</h1>
+				<h1>Travel on Chain</h1>
 				<div className="bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">
 					<TypewriterComponent
 						options={{
-							strings: ['Composable!', 'Explore more.', 'Enjoy more.'],
+							strings: ['Enjoy travel!', 'Explore more.', 'Enjoy more.'],
 							autoStart: true,
 							loop: true
 						}}

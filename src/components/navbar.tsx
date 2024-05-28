@@ -68,7 +68,7 @@ export const Navbar = ({ className }: { className: String }) => {
 							smallScreen: 'avatar',
 							largeScreen: 'full'
 						}}
-					></ConnectButton>
+					>Connect Wallet</ConnectButton>
 				</Link>
 			</div>
 		</nav>
