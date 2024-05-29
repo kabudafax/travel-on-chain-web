@@ -2,13 +2,16 @@ import React, {
 	useEffect,
 	useRef,
 	useImperativeHandle,
-	forwardRef
+	forwardRef,
+	useLayoutEffect
 } from 'react';
-
+import ConfettiGenerator from 'confetti-js';
+import { object } from 'zod';
 const FireworksCanvas = forwardRef((props, ref) => {
 	const canvasRef = useRef(null);
 	const intervalRef = useRef(null);
 	const particlesRef = useRef([]);
+	const [confetti, setConfetti] = React.useState(null);
 
 	// 创建 Particle 类
 	class Particle {
@@ -80,6 +83,8 @@ const FireworksCanvas = forwardRef((props, ref) => {
 			createFirework(ctx, canvas);
 			intervalRef.current = setInterval(() => createFirework(ctx, canvas), 500); // 每0.5秒创建一个新的烟花
 			requestAnimationFrame(() => animate(ctx, canvas));
+			// confetti2.render();
+			confetti?.render();
 		}
 	};
 
@@ -109,20 +114,78 @@ const FireworksCanvas = forwardRef((props, ref) => {
 			window.removeEventListener('resize', resizeCanvas);
 		};
 	}, []);
+	const duration = 15 * 1000,
+		animationEnd = Date.now() + duration,
+		defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+	function randomInRange(min, max) {
+		return Math.random() * (max - min) + min;
+	}
+
+	const interval = setInterval(function () {
+		const timeLeft = animationEnd - Date.now();
+
+		if (timeLeft <= 0) {
+			return clearInterval(interval);
+		}
+
+		const particleCount = 50 * (timeLeft / duration);
+
+		// since particles fall down, start a bit higher than random
+	}, 250);
+
+	useLayoutEffect(() => {
+		const confettiSettings = {
+			target: 'confetti-canvas',
+			max: '180',
+			size: '1',
+			animate: true,
+			props: [
+				'circle',
+				'square',
+				'triangle',
+				'line',
+				{ type: 'svg', src: 'site/hat.svg', size: 44, weight: 0.2 }
+			],
+			colors: [
+				[165, 104, 246],
+				[230, 61, 135],
+				[0, 199, 228],
+				[253, 214, 126]
+			],
+			clock: '25',
+			rotate: true,
+			width: '2560',
+			height: '1271',
+			start_from_edge: false,
+			respawn: true
+		};
+		setConfetti(new ConfettiGenerator(confettiSettings));
+	}, []);
 
 	return (
-		<canvas
-			ref={canvasRef}
-			style={{
-				position: 'absolute',
-				zIndex: 5,
-				top: 10,
-				// top: 82,
-				left: 0,
-				right: 0,
-				width: window.innerWidth * 0.7
-			}}
-		/>
+		<>
+			<canvas
+				ref={canvasRef}
+				style={{
+					position: 'absolute',
+					zIndex: 8,
+					top: 10,
+					// top: 82,
+					left: 0,
+					right: 0,
+					width: window.innerWidth * 0.7
+				}}
+			/>
+			<canvas
+				id="confetti-canvas"
+				className="fixed bottom-0 left-0 right-0 top-0 z-[8] h-full w-full"
+			/>
+			<canvas
+				id="confetti-canvas"
+				className="fixed bottom-0 left-0 right-0 top-0 z-[8] h-full w-full"
+			/>
+		</>
 	);
 });
 

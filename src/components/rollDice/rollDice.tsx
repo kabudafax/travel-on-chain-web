@@ -243,8 +243,8 @@ export const RollDice = ({ onDiceChange }: { onDiceChange: Function }) => {
 				// 	}
 				// }}
 				onClick={handleDiceclick}
-				style={{ zIndex: 6 }}
-				className={cn('dice-button !z-6 absolute left-[30%] top-[40%] ')}
+				style={{ zIndex: 99 }}
+				className={cn('dice-button !z-99 absolute left-[30%] top-[40%] ')}
 			>
 				<div id="scene">
 					<div id="cover">
