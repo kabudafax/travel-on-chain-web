@@ -206,7 +206,9 @@ export const RollDice = ({ onDiceChange }: { onDiceChange: Function }) => {
 				dice.style.transform = `translateY(0px) rotateX(-30deg) rotateY(${rotateY}deg) rotateZ(${rotateZ}deg)`;
 
 				// dice.style.transition = 'none';
-				dice.style.animation = 'spin 25s infinite linear';
+				setTimeout(() => {
+					dice.style.animation = 'spin 25s infinite linear';
+				}, 2500);
 			}, 1500);
 
 			// chess move by dice steps

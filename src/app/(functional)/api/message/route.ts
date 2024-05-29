@@ -20,7 +20,7 @@ export async function POST(req: Request) {
 		role: 'system',
 		content: chatbotPrompt
 	});
-	console.log('outboundMessages', outboundMessages);
+	// console.log('outboundMessages', outboundMessages);
 
 	const payload: OpenAIStreamPayload = {
 		// model: "gpt-3.5-turbo",

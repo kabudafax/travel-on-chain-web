@@ -21,6 +21,7 @@ import { RollDice } from '@/components/rollDice/rollDice';
 import Modal from '@/components/modal';
 import { useModalStore } from '@/store/useModalStore';
 import FireworksCanvas from './fireworks';
+import RankingList from '@/components/side-widgets/ranking-list';
 // import Image from 'next/image';
 
 //向右x+50y+14;
@@ -91,24 +92,28 @@ export default function Game() {
 			switch (step.dir) {
 				case 'right':
 					for (let i = 0; i < step.times; i++) {
+						// @ts-ignore
 						routes.push(right(routes[times]));
 						times++;
 					}
 					break;
 				case 'left':
 					for (let i = 0; i < step.times; i++) {
+						// @ts-ignore
 						routes.push(left(routes[times]));
 						times++;
 					}
 					break;
 				case 'up':
 					for (let i = 0; i < step.times; i++) {
+						// @ts-ignore
 						routes.push(up(routes[times]));
 						times++;
 					}
 					break;
 				case 'upLeft':
 					for (let i = 0; i < step.times; i++) {
+						// @ts-ignore
 						routes.push(upLeft(routes[times]));
 						times++;
 					}
@@ -122,6 +127,7 @@ export default function Game() {
 	}
 
 	function drawBoard(routes: Routes) {
+		// @ts-ignore
 		const context = canvasRef.current?.getContext('2d');
 
 		// 获取走过的点位的缓存
@@ -148,12 +154,14 @@ export default function Game() {
 
 	const handleStart = () => {
 		if (fireworksRef.current) {
+			// @ts-ignore
 			fireworksRef.current.startFireworks();
 		}
 	};
 
 	const handleStop = () => {
 		if (fireworksRef.current) {
+			// @ts-ignore
 			fireworksRef.current.stopFireworks();
 		}
 	};
@@ -196,6 +204,7 @@ export default function Game() {
 			passRoutes: []
 		});
 
+		// @ts-ignore
 		gameRef.current = game;
 		// console.log(canvasRef.current, 'canvasRef.current');
 
@@ -223,6 +232,7 @@ export default function Game() {
 			imgs.forEach((img, inx) => {
 				const imgSingle = new Image();
 				imgSingle.onload = function () {
+					// @ts-ignore
 					const context = canvasRef.current.getContext('2d');
 
 					if (inx === 3) {
@@ -256,6 +266,7 @@ export default function Game() {
 		if (animateCanvasRef?.current) {
 			const userIcon = new Image();
 			userIcon.onload = function () {
+				// @ts-ignore
 				const animaContext = animateCanvasRef?.current?.getContext('2d');
 				// console.log(animaContext, 'animate', animateCanvasRef);
 				animaContext?.drawImage(
@@ -279,6 +290,7 @@ export default function Game() {
 
 		return () => {
 			if (canvasRef.current) {
+				// @ts-ignore
 				animateCanvasRef.current?.removeEventListener('click', go);
 			}
 			window.removeEventListener('resize', handleResize);
@@ -287,6 +299,7 @@ export default function Game() {
 
 	async function go(moves: number) {
 		if (gameRef.current) {
+			// @ts-ignore
 			await gameRef.current.animate(moves);
 		}
 		setTimeout(() => {
@@ -352,17 +365,20 @@ export default function Game() {
 					<FireworksCanvas ref={fireworksRef} />
 					<img
 						src="/assets/chessbg.png"
+						// src="/assets/bg-journey.jpg"
 						alt="background-img for chess board"
 						className="absolute left-0 top-0  z-[2] w-full object-cover opacity-100"
 						style={{
-							marginTop: 10,
-							width: canvasWidth - 50,
-							height: 728
+							marginTop: -60,
+							marginLeft: 0,
+							width: canvasWidth - 25
+							// width: canvasWidth - 50
+							// height: 728
 						}}
 					/>
 				</div>
 				<RollDice onDiceChange={go} />
-				<div className="flex grow justify-center">
+				<div className="flex grow flex-col items-center justify-start">
 					<div
 						className=" size-12 w-max  text-white"
 						style={{ fontSize: 24 }}
@@ -370,6 +386,7 @@ export default function Game() {
 					>
 						MY NFTS
 					</div>
+					<RankingList />
 				</div>
 			</div>
 		</div>
