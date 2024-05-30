@@ -51,12 +51,12 @@ const CardCollection: FC<CardCollectionProps> = ({}) => {
 					</div>
 				</SheetContent>
 			</Sheet>
-			<div className=" overflow-hidden rounded-xl font-sans shadow-md">
+			{/* <div className=" overflow-hidden rounded-xl font-sans shadow-md">
 				<div className="flex">
 					<div className="group flex h-64 w-32 flex-1 scale-100 transform items-center justify-center bg-[#264653] font-semibold tracking-wide text-white transition duration-100 group-hover:scale-150">
-						{/* <span className="opacity-0 transition-opacity group-hover:opacity-100">
+						<span className="opacity-0 transition-opacity group-hover:opacity-100">
 							264653
-						</span> */}
+						</span>
 					</div>
 					<div className="group flex h-64 w-32 flex-1 items-center justify-center bg-[#2A9D8F] font-semibold tracking-wide text-white transition duration-100">
 						<span className="opacity-0 transition-opacity group-hover:opacity-100">
@@ -79,7 +79,7 @@ const CardCollection: FC<CardCollectionProps> = ({}) => {
 						</span>
 					</div>
 				</div>
-			</div>
+			</div> */}
 		</div>
 	);
 };
