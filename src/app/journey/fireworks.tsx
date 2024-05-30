@@ -91,6 +91,7 @@ const FireworksCanvas = forwardRef((props, ref) => {
 	const stopFireworks = () => {
 		clearInterval(intervalRef.current);
 		intervalRef.current = null;
+		confetti?.clear();
 	};
 
 	useImperativeHandle(ref, () => ({

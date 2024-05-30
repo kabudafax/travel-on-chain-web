@@ -157,10 +157,10 @@ export default function Game() {
 	};
 
 	const handleStop = () => {
-		if (fireworksRef.current) {
-			// @ts-ignore
-			fireworksRef.current.stopFireworks();
-		}
+		// if (fireworksRef.current) {
+		// @ts-ignore
+		fireworksRef.current.stopFireworks();
+		// }
 	};
 
 	useEffect(() => {

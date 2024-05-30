@@ -243,7 +243,7 @@ export const RollDice = ({ onDiceChange }: { onDiceChange: Function }) => {
 				// 	}
 				// }}
 				onClick={handleDiceclick}
-				style={{ zIndex: 6 }}
+				style={{ zIndex: 9 }}
 				className={cn(
 					'dice-button !z-6 !pointer-events-auto absolute left-[30%] top-[40%] '
 				)}
