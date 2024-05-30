@@ -54,7 +54,7 @@ const rankInfos = [
 	},
 	{
 		rank: '5',
-		NFTs: '488',
+		NFTs: '38',
 		citys: '7',
 		player: {
 			avatar: '/assets/ranks-avatar/avatar_5.png',
@@ -63,7 +63,7 @@ const rankInfos = [
 	},
 	{
 		rank: '6',
-		NFTs: '488',
+		NFTs: '38',
 		citys: '7',
 		player: {
 			avatar: '/assets/ranks-avatar/avatar_6.png',
@@ -72,17 +72,17 @@ const rankInfos = [
 	}
 ];
 
-const RankingList: FC<RankingListProps> = ({}) => {
+const RankingList: FC<RankingListProps> = ({ className }) => {
 	return (
-		<div className="w-full text-white">
+		<div className={cn(className, 'w-full text-white')}>
 			<Table>
 				<TableCaption>A list of city NFT Rankings.</TableCaption>
 				<TableHeader>
 					<TableRow>
-						<TableHead className="w-[100px]">Rank</TableHead>
-						<TableHead>NFTs</TableHead>
-						<TableHead>City</TableHead>
-						<TableHead className="text-center">Player</TableHead>
+						<TableHead className="w-[100px] text-lg">Rank</TableHead>
+						<TableHead className="text-lg">NFTs</TableHead>
+						<TableHead className="text-lg">City</TableHead>
+						<TableHead className="text-center text-lg">Player</TableHead>
 					</TableRow>
 				</TableHeader>
 				<TableBody>
@@ -91,7 +91,7 @@ const RankingList: FC<RankingListProps> = ({}) => {
 							<TableCell
 								className={cn('text-3xl font-medium text-accent', {
 									'text-lg': Number(rankInfo.rank) > 3,
-									'pl-6': Number(rankInfo.rank) > 3
+									'pl-6 text-orange-300': Number(rankInfo.rank) > 3
 								})}
 							>
 								{rankInfo.rank}
@@ -102,15 +102,15 @@ const RankingList: FC<RankingListProps> = ({}) => {
 								{/* {rankInfo.player.accout} */}
 								<div className="flex items-center gap-2 ">
 									<div className="avatar w-8 overflow-hidden rounded-full">
-										<Image
+										<img
 											src={rankInfo.player.avatar}
 											alt=""
 											width={32}
 											height={32}
-											style={{ width: '100%', height: 'auto' }}
+											style={{ width: '32px', height: 'auto' }}
 										/>
 									</div>
-									<div className="account ml-2  max-w-[130px] truncate font-medium">
+									<div className="account ml-2  max-w-[130px] truncate font-normal">
 										{rankInfo.player.accout}
 									</div>
 								</div>

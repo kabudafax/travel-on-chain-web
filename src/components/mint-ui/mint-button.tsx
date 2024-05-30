@@ -9,17 +9,25 @@ import { useModalStore } from '@/store/useModalStore';
 
 import { useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
 
-const sleep = (time: number) => (new Promise(r => setTimeout(r, time)));
+const sleep = (time: number) => new Promise((r) => setTimeout(r, time));
 
-const abi = [{ 'type': 'function', 'name': 'mintNft', 'inputs': [], 'outputs': [], 'stateMutability': 'nonpayable' }];
+const abi = [
+	{
+		type: 'function',
+		name: 'mintNft',
+		inputs: [],
+		outputs: [],
+		stateMutability: 'nonpayable'
+	}
+];
 
 // sepolia
 const contractAddress = '0x5EcBC930C89AA39BB57534271324A4Cd6B81d4d7';
 
 type PinataMetaData = {
-	metaData: string,
-	img: string,
-}
+	metaData: string;
+	img: string;
+};
 
 export const MintButton = ({ metaData, img }: PinataMetaData) => {
 	const [isLoading, setIsLoading] = useState(false);
@@ -31,7 +39,8 @@ export const MintButton = ({ metaData, img }: PinataMetaData) => {
 
 	// 链上交互 START
 	const { data: hash, error, isPending, writeContract } = useWriteContract();
-	const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({ hash });
+	const { isLoading: isConfirming, isSuccess: isConfirmed } =
+		useWaitForTransactionReceipt({ hash });
 	useEffect(() => {
 		console.log('交易状态发生改变');
 		console.log(hash);
@@ -57,17 +66,18 @@ export const MintButton = ({ metaData, img }: PinataMetaData) => {
 			setLoadingText('NFT上链失败：' + error.name);
 			mintFinished(error.name);
 		}
-
 	}, [isPending, error, isConfirming, isConfirmed]);
 	// 链上交互 END
 
 	const uploadFile = async () => {
 		const filePath = img;
 		console.log(metaData, img);
-		const fileStream = (await fetch(filePath));
+		const fileStream = await fetch(filePath);
 		const type = fileStream.headers.get('Content-Type') || '';
 		const buffer = await fileStream.arrayBuffer();
-		const file = new File([buffer], filePath.split('/').pop() || 'image', { type });
+		const file = new File([buffer], filePath.split('/').pop() || 'image', {
+			type
+		});
 		const data = new FormData();
 		data.set('file', file);
 		data.set('metadata', metaData);
@@ -78,7 +88,6 @@ export const MintButton = ({ metaData, img }: PinataMetaData) => {
 		});
 		const resData = await res.json();
 		setCid(resData.IpfsHash);
-
 	};
 
 	const handleMint = async () => {
@@ -101,7 +110,6 @@ export const MintButton = ({ metaData, img }: PinataMetaData) => {
 		} catch (e) {
 			return mintFinished(e);
 		}
-
 	};
 
 	const mintFinished = (error: any) => {
@@ -118,39 +126,42 @@ export const MintButton = ({ metaData, img }: PinataMetaData) => {
 				description: (
 					<a
 						href={`https://sepolia.etherscan.io/tx/${hash}`}
-						className='hover:underline'
-						target='_blank'
+						className="hover:underline"
+						target="_blank"
 					>
 						View on explorer 🔗
 					</a>
 				),
-				action: <ToastAction altText='Confirm'>Confirm ✨</ToastAction>
+				action: <ToastAction altText="Confirm">Confirm ✨</ToastAction>
 			});
 		}
 	};
 
 	const savePoint = () => {
-		const mintedPoint = localStorage.getItem('mintedPoint') ? (JSON.parse(localStorage.getItem('mintedPoint') as string)) : [];
+		const mintedPoint = localStorage.getItem('mintedPoint')
+			? JSON.parse(localStorage.getItem('mintedPoint') as string)
+			: [];
 		console.log('mintedPoint', mintedPoint);
 		let curIndex = localStorage.getItem('currentPosition');
 		if (curIndex) {
+			// @ts-ignore
 			curIndex = parseInt(curIndex, 10);
 			if (!mintedPoint.includes(curIndex)) {
 				mintedPoint.push(curIndex);
 				window.localStorage.setItem('mintedPoint', JSON.stringify(mintedPoint));
 			}
 		}
-		renderCallback && renderCallback()
+		renderCallback && renderCallback();
 	};
 
 	return (
 		<div>
 			<Button
-				variant='premium'
-				className='mt-4 rounded-full p-4  font-semibold md:p-6 md:text-lg'
+				variant="premium"
+				className=" rounded-full p-4  font-semibold md:p-6 md:text-lg"
 				onClick={handleMint}
 			>
-				Start Mint!
+				Mint
 			</Button>
 			{isLoading && <Loading loadingText={loadingText} />}
 		</div>

@@ -3,83 +3,77 @@ import shanghai from '../../public/shanghai.jpg';
 import Image from 'next/image';
 import { Button } from './ui/button';
 import { MintButton } from './mint-ui/mint-button';
+import Card from '@/components/hover-card/hover-card';
+import CardCollection from './side-widgets/card-collection';
 interface ModalProps {
 	show: boolean;
 	onClose: () => void;
 }
 
+type info = {
+	des: string;
+	src_img: string;
+	src_video: string;
+	name: string;
+	details: {
+		post: string;
+		locate: string;
+	};
+};
+
 const Modal: React.FC<ModalProps> = ({ show, onClose }) => {
 	// const [info, setInfo] = React.useState<any>();
-	const [info, setInfo] = React.useState({});
+	const [info, setInfo] = React.useState<info>({
+		des: '',
+		src_img: '',
+		src_video: '',
+		name: '',
+		details: { post: '', locate: '' }
+	});
 	useEffect(() => {
-		if (show) {
-			setInfo(
-				Math.random() < 0.5
-					? {
-							des: "Shanghai is the largest city in China by population and the largest city proper by population in the world. It is one of the four direct-controlled municipalities of the People's Republic of China, with a population of more than 24 million as of 2017. It is a global financial center and transport hub, with the world's busiest container port. Located in the Yangtze River Delta, it sits on the south edge of the estuary of the Yangtze in the middle portion of the East China coast. The municipality borders the provinces of Jiangsu and Zhejiang to the north, south and west, and is bounded to the east by the East China Sea.",
-							src: '/shanghai.jpg',
-							name: 'SHANGHAI'
+		setInfo(
+			Math.random() < 0.5
+				? {
+						des: 'Shanghai, a bustling metropolis blending tradition and modernity, renowned for its vibrant energy and diverse attractions.',
+						// src_img: '/shanghai.jpg',
+						src_img: '/video/shanghai/shanghai-unsplash-denys-nevozhai.jpg',
+						src_video: '/video/shanghai/shanghai1min.mp4',
+						name: 'SHANGHAI',
+						details: {
+							post: 'The Bund',
+							locate: 'Shanghai China'
 						}
-					: {
-							des: "Beijing, alternatively romanized as Peking, is the capital of the People's Republic of China. It is the world's most populous capital city, with over 21 million residents within an administrative area of 16,410.5 km2. The city, located in Northern China, is governed as a municipality under the direct administration of the central government with 16 urban, suburban, and rural districts. Beijing is mostly surrounded by Hebei Province with the exception of neighboring Tianjin to the southeast; together, the three divisions form the Jingjinji megalopolis and the national capital region of China.",
-							src: '/beijing.jpg',
-							name: 'BEIJING'
+					}
+				: {
+						des: 'Beijing, where ancient wonders meet modern marvels, a city rich in history and cultural significance.',
+						// src: '/beijing.jpg',
+						src_img: '/video/beijing/beijing-great-wall.jpg',
+						src_video: '/video/beijing/beijing5mins.mp4',
+						name: 'BEIJING',
+						details: {
+							post: 'The Great Wall',
+							locate: 'Beijing China'
 						}
-			);
-		} else {
-			setInfo({});
-		}
+					}
+		);
 	}, [show]);
 	return (
 		<div
-			className={`fixed inset-0  z-30 scale-105 transform bg-black bg-opacity-50 ${show ? 'visible opacity-100' : 'invisible opacity-0'} transition-all duration-300`}
+			className={`!pointer-events-auto fixed inset-0  z-50 scale-100 transform bg-black bg-opacity-50 ${show ? 'visible opacity-100' : 'invisible opacity-0'} transition-all duration-300`}
 			onClick={onClose}
 		>
 			<div
-				className="absolute left-1/2 top-1/2  z-50 flex w-4/5 max-w-lg -translate-x-1/2 -translate-y-1/2 transform items-center space-x-4 rounded-lg bg-white bg-gradient-to-br from-purple-200 to-blue-300 p-4"
+				className="absolute left-1/2 top-1/2  z-50 flex w-4/5 max-w-lg -translate-x-1/2 -translate-y-1/2 transform flex-col items-center space-x-4 rounded-lg bg-transparent   p-4"
 				onClick={(e) => e.stopPropagation()}
 			>
-				{Object.keys(info).length !== 0 && (
-					<Image
-						className="w-1/2 rounded-sm"
-						// @ts-ignore
-						src={info!.src}
-						width={300}
-						height={440}
-						alt="Modal"
-					/>
-				)}
-				<div>
-					{/* @ts-ignore */}
-					<p className="flex-grow text-black">{info?.name}</p>
-					{/* <div className=" text-start text-xs  font-normal text-gray-500">
-						
-						{info?.des}
-					</div> */}
-					<div className="mt-4 overflow-hidden">
-						<video
-							src="https://i.imgur.com/338QfhC.mp4"
-							loop
-							muted
-							controls
-							autoPlay
-							className="max-h-65 w-80 object-contain"
-						></video>
-					</div>
-					{/* <Button
-						variant="premium"
-						className="mt-4 rounded-full p-4  font-semibold md:p-6 md:text-lg"
-					>
-						Start Mint!
-					</Button> */}
-					<MintButton
-						/* @ts-ignore */
-						metaData={JSON.stringify({ name: info.name, desc: info.des })}
-						/* @ts-ignore */
-						img={info.src}
-					/>
-				</div>
+				<Card info={info} />
+
+				{/* <MintButton
+					metaData={JSON.stringify({ name: info.name, desc: info.des })}
+					img={info.src_img}
+				/> */}
 			</div>
+			{/* <CardCollection /> */}
 		</div>
 	);
 };

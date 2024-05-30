@@ -22,6 +22,7 @@ import Modal from '@/components/modal';
 import { useModalStore } from '@/store/useModalStore';
 import FireworksCanvas from './fireworks';
 import RankingList from '@/components/side-widgets/ranking-list';
+import CardCollection from '@/components/side-widgets/card-collection';
 // import Image from 'next/image';
 
 //向右x+50y+14;
@@ -331,6 +332,7 @@ export default function Game() {
 		// bg-[#111827]
 		<div className="h-full overflow-auto  bg-[#81b1bb]">
 			<Modal show={isShow} onClose={() => setIsShow(false)} />
+			{/* <Modal show={true} onClose={() => setIsShow(false)} /> */}
 
 			<div className="box flex">
 				<div
@@ -377,16 +379,26 @@ export default function Game() {
 						}}
 					/>
 				</div>
+				{/* {!isShow && <RollDice onDiceChange={go} />} */}
 				<RollDice onDiceChange={go} />
-				<div className="flex grow flex-col items-center justify-start">
+				<CardCollection />
+				<div
+					className="relative flex grow flex-col items-center justify-start overflow-auto"
+					// style={{ backgroundImage: "url('/assets/bg-rankings.png')" }}
+				>
 					<div
-						className=" size-12 w-max  text-white"
+						className="relative z-[3] size-12 w-max  pt-2 font-semibold text-[#5e5b5b]"
 						style={{ fontSize: 24 }}
 						onClick={() => handleStart()}
 					>
-						MY NFTS
+						Ranking List
 					</div>
-					<RankingList />
+					<RankingList className="relative z-[3]" />
+					<img
+						src="/assets/bg-rankings.png"
+						alt=""
+						className=" absolute -left-4 -top-16 z-[2] h-full  w-full object-cover"
+					/>
 				</div>
 			</div>
 		</div>

@@ -41,3 +41,6 @@ next-env.d.ts
 
 # assets of cesium
 /public/cesium
+
+# video resource
+/public/video

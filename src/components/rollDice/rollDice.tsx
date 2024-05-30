@@ -207,7 +207,7 @@ export const RollDice = ({ onDiceChange }: { onDiceChange: Function }) => {
 
 				// dice.style.transition = 'none';
 				setTimeout(() => {
-					dice.style.animation = 'spin 25s infinite linear';
+					dice.style.animation = 'dice-spin 25s infinite linear';
 				}, 2500);
 			}, 1500);
 
@@ -244,7 +244,9 @@ export const RollDice = ({ onDiceChange }: { onDiceChange: Function }) => {
 				// }}
 				onClick={handleDiceclick}
 				style={{ zIndex: 6 }}
-				className={cn('dice-button !z-6 absolute left-[30%] top-[40%] ')}
+				className={cn(
+					'dice-button !z-6 !pointer-events-auto absolute left-[30%] top-[40%] '
+				)}
 			>
 				<div id="scene">
 					<div id="cover">
