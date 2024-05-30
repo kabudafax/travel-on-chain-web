@@ -74,15 +74,29 @@ const rankInfos = [
 
 const RankingList: FC<RankingListProps> = ({ className }) => {
 	return (
-		<div className={cn(className, 'w-full text-white')}>
+		<div className={cn(className, 'w-full')} style={{ color: 'rgb(24 24 24)' }}>
 			<Table>
 				<TableCaption>A list of city NFT Rankings.</TableCaption>
 				<TableHeader>
 					<TableRow>
-						<TableHead className="w-[100px] text-lg">Rank</TableHead>
-						<TableHead className="text-lg">NFTs</TableHead>
-						<TableHead className="text-lg">City</TableHead>
-						<TableHead className="text-center text-lg">Player</TableHead>
+						<TableHead
+							className="w-[100px] text-lg"
+							style={{ color: 'rgb(24 24 24)' }}
+						>
+							Rank
+						</TableHead>
+						<TableHead className="text-lg " style={{ color: 'rgb(24 24 24)' }}>
+							NFTs
+						</TableHead>
+						<TableHead className="text-lg" style={{ color: 'rgb(24 24 24)' }}>
+							City
+						</TableHead>
+						<TableHead
+							className="text-center text-lg"
+							style={{ color: 'rgb(24 24 24)' }}
+						>
+							Player
+						</TableHead>
 					</TableRow>
 				</TableHeader>
 				<TableBody>

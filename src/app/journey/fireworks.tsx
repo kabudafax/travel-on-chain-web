@@ -181,10 +181,12 @@ const FireworksCanvas = forwardRef((props, ref) => {
 			<canvas
 				id="confetti-canvas"
 				className="fixed bottom-0 left-0 right-0 top-0 z-[5] h-full w-full"
+				pointer-events-none
 			/>
 			<canvas
 				id="confetti-canvas"
 				className="fixed bottom-0 left-0 right-0 top-0 z-[5] h-full w-full"
+				pointer-events-none
 			/>
 		</>
 	);

@@ -28,7 +28,7 @@ const CardCollection: FC<CardCollectionProps> = ({}) => {
 		<div className="cardCollection fixed bottom-0 left-0 z-[6]">
 			<Sheet>
 				<SheetTrigger asChild className="absolute bottom-0 z-[32]">
-					<Button variant="outline">open</Button>
+					<Button variant="outline">My NFTS</Button>
 				</SheetTrigger>
 				{/* <SheetOverlay className="bg-black/10" /> */}
 				<SheetContent

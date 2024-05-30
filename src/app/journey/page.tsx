@@ -28,28 +28,28 @@ const imgs = [tempale1, tempale2, panda];
 function right(point: Point) {
 	return {
 		x: point.x + 53,
-		y: point.y + 12.8
+		y: point.y + 12
 	};
 }
 
 function left(point: Point) {
 	return {
-		x: point.x - 47.8,
-		y: point.y + 21.8
+		x: point.x - 48,
+		y: point.y + 22
 	};
 }
 
 function up(point: Point) {
 	return {
-		x: point.x + 47.5,
-		y: point.y - 21.8
+		x: point.x + 48,
+		y: point.y - 22
 	};
 }
 
 function upLeft(point: Point) {
 	return {
-		x: point.x - 53.3,
-		y: point.y - 12.6
+		x: point.x - 53,
+		y: point.y - 12
 	};
 }
 export default function Game() {
@@ -165,7 +165,7 @@ export default function Game() {
 
 	useEffect(() => {
 		const routes = generateRoutes(
-			{ x: 220, y: 128, center: { x: 180, y: 105 } },
+			{ x: 215, y: 126, center: { x: 180, y: 105 } },
 			[
 				{ dir: 'right', times: 3 },
 				{ dir: 'left', times: 5 },
@@ -300,9 +300,9 @@ export default function Game() {
 			await gameRef.current.animate(moves);
 		}
 		setTimeout(() => {
-			// setIsShow(true);
+			setIsShow(true);
 			setFinishedModalShow(true);
-			handleStart();
+			// handleStart();
 		}, 2000);
 	}
 
@@ -328,7 +328,7 @@ export default function Game() {
 
 	return (
 		// bg-[#111827]
-		<div className="h-full overflow-auto  bg-[#81b1bb]">
+		<div className=" overflow-auto bg-[#e6c8af]">
 			<Modal show={isShow} onClose={() => setIsShow(false)} />
 			{/* <Modal show={true} onClose={() => setIsShow(false)} /> */}
 
@@ -343,7 +343,7 @@ export default function Game() {
 				<div
 					id="chess-board"
 					className="relative flex-shrink flex-grow-0 overflow-auto"
-					style={{ flexBasis: '70%' }}
+					style={{ flexBasis: '70%', maxHeight: 895, overflow: 'hidden' }}
 				>
 					<canvas
 						style={{
@@ -355,7 +355,6 @@ export default function Game() {
 						id="canvas"
 						ref={canvasRef}
 					></canvas>
-					<div></div>
 					<canvas
 						id="anicanvas"
 						ref={animateCanvasRef}
@@ -371,15 +370,15 @@ export default function Game() {
 					></canvas>
 					<FireworksCanvas ref={fireworksRef} />
 					<img
-						src="/assets/chessbg.png"
+						src="/assets/chessbg.jpg"
 						// src="/assets/bg-journey.jpg"
 						alt="background-img for chess board"
 						className="absolute left-0 top-0  z-[2] w-full object-cover opacity-100"
 						style={{
-							marginTop: -60,
-							marginLeft: 0,
-							width: canvasWidth - 25,
-							height: window.innerHeight * 0.94
+							// marginTop: -60,
+							// marginLeft: 0,
+							width: canvasWidth - 5,
+							height: 896
 							// width: canvasWidth - 50
 							// height: 728
 						}}
@@ -406,8 +405,8 @@ export default function Game() {
 
 					<div className="flex grow flex-col items-center justify-start">
 						<div
-							className="relative z-[3] size-12 w-max  pt-2 font-semibold text-[#5e5b5b]"
-							style={{ fontSize: 24 }}
+							className="relative z-[3] size-12 w-max  pt-2 font-semibold"
+							style={{ fontSize: 24, color: 'rgb(24 24 24)' }}
 							onClick={() => handleStart()}
 						>
 							Ranking List
@@ -416,7 +415,8 @@ export default function Game() {
 						<img
 							src="/assets/bg-rankings.png"
 							alt=""
-							className=" absolute -left-4 -top-16 z-[2] h-full  w-full object-cover"
+							className=" absolute -left-4 -top-16 z-[2] w-full object-cover"
+							style={{ height: 973, filter: 'blur(10px)' }}
 						/>
 					</div>
 				</div>
