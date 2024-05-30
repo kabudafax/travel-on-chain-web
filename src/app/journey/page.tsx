@@ -5,25 +5,19 @@ import React, { useEffect, useRef, useState } from 'react';
 import GameCanvas from '@/app/journey/game';
 import tempale1 from '@/../public/tempale1.png';
 import tempale2 from '@/../public/tempale2.png';
-// import single4 from '@/../public/single4.png';
-// import single5 from '@/../public/single5.png';
-// import single6 from '@/../public/single6.png';
-// import d from '@/../public/d.png';
+
 import panda from '@/../public/panda.png';
 import user from '@/../public/man.png';
 import { centers } from './constant';
-import tempale3 from '@/../public/tample3.png';
-
-import { cn } from '@/lib/utils';
-import '@/components/rollDice/styles.scss';
 import { RollDice } from '@/components/rollDice/rollDice';
-
 import Modal from '@/components/modal';
 import { useModalStore } from '@/store/useModalStore';
 import FireworksCanvas from './fireworks';
 import RankingList from '@/components/side-widgets/ranking-list';
 import CardCollection from '@/components/side-widgets/card-collection';
-// import Image from 'next/image';
+import FinishedModal from '@/components/finished-modal';
+import '@/components/rollDice/styles.scss';
+import { FinalMint } from '@/components/mint-ui/final-mint';
 
 //向右x+50y+14;
 //向左x - 48 y-22;
@@ -60,6 +54,7 @@ function upLeft(point: Point) {
 }
 export default function Game() {
 	const [canvasWidth, setCanvasWidth] = useState(0);
+	const [finishedModalShow, setFinishedModalShow] = useState(false);
 	const canvasRef = useRef(null);
 	const animateCanvasRef = useRef(null);
 	const gameRef = useRef(null);
@@ -71,9 +66,10 @@ export default function Game() {
 	// });
 	// const gridcanvasRef = useRef(null);
 	// const cordinateCanvasRef = useRef(null);
-	const start = localStorage.getItem('currentPosition')
-		? parseInt(localStorage.getItem('currentPosition') as string, 10)
-		: 0;
+	const start = 48;
+	// localStorage.getItem('currentPosition')
+	// 	? parseInt(localStorage.getItem('currentPosition') as string, 10)
+	// 	: 0;
 	// if (typeof window !== 'undefined') {
 	// 	start =
 	// 		window.localStorage.getItem('lastIndex') !== null &&
@@ -304,7 +300,9 @@ export default function Game() {
 			await gameRef.current.animate(moves);
 		}
 		setTimeout(() => {
-			setIsShow(true);
+			// setIsShow(true);
+			setFinishedModalShow(true);
+			handleStart();
 		}, 2000);
 	}
 
@@ -334,6 +332,13 @@ export default function Game() {
 			<Modal show={isShow} onClose={() => setIsShow(false)} />
 			{/* <Modal show={true} onClose={() => setIsShow(false)} /> */}
 
+			<FinishedModal
+				show={finishedModalShow}
+				onClose={() => {
+					setFinishedModalShow(false);
+					handleStop();
+				}}
+			/>
 			<div className="box flex">
 				<div
 					id="chess-board"
@@ -373,7 +378,8 @@ export default function Game() {
 						style={{
 							marginTop: -60,
 							marginLeft: 0,
-							width: canvasWidth - 25
+							width: canvasWidth - 25,
+							height: window.innerHeight * 0.94
 							// width: canvasWidth - 50
 							// height: 728
 						}}
@@ -387,18 +393,32 @@ export default function Game() {
 					// style={{ backgroundImage: "url('/assets/bg-rankings.png')" }}
 				>
 					<div
-						className="relative z-[3] size-12 w-max  pt-2 font-semibold text-[#5e5b5b]"
-						style={{ fontSize: 24 }}
-						onClick={() => handleStart()}
-					>
-						Ranking List
+						style={{
+							width: finishedModalShow ? window.innerWidth : 0,
+							height: window.innerHeight,
+							background: 'rgba(0,0,0,0.5)',
+							position: 'absolute',
+							top: 0,
+							left: 0,
+							zIndex: 7
+						}}
+					></div>
+
+					<div className="flex grow flex-col items-center justify-start">
+						<div
+							className="relative z-[3] size-12 w-max  pt-2 font-semibold text-[#5e5b5b]"
+							style={{ fontSize: 24 }}
+							onClick={() => handleStart()}
+						>
+							Ranking List
+						</div>
+						<RankingList className="relative z-[3]" />
+						<img
+							src="/assets/bg-rankings.png"
+							alt=""
+							className=" absolute -left-4 -top-16 z-[2] h-full  w-full object-cover"
+						/>
 					</div>
-					<RankingList className="relative z-[3]" />
-					<img
-						src="/assets/bg-rankings.png"
-						alt=""
-						className=" absolute -left-4 -top-16 z-[2] h-full  w-full object-cover"
-					/>
 				</div>
 			</div>
 		</div>
