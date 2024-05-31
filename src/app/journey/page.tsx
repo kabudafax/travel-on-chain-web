@@ -301,7 +301,7 @@ export default function Game() {
 		}
 		setTimeout(() => {
 			setIsShow(true);
-			setFinishedModalShow(true);
+			// setFinishedModalShow(true);
 			// handleStart();
 		}, 2000);
 	}

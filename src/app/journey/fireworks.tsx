@@ -175,17 +175,18 @@ const FireworksCanvas = forwardRef((props, ref) => {
 					// top: 82,
 					left: 0,
 					right: 0,
-					width: window.innerWidth * 0.7
+					width: window.innerWidth * 0.7,
+					pointerEvents: 'none'
 				}}
 			/>
 			<canvas
 				id="confetti-canvas"
-				className="fixed bottom-0 left-0 right-0 top-0 z-[5] h-full w-full"
+				className="pointer-events-none fixed bottom-0 left-0 right-0 top-0 z-[5] h-full w-full"
 				pointer-events-none
 			/>
 			<canvas
 				id="confetti-canvas"
-				className="fixed bottom-0 left-0 right-0 top-0 z-[5] h-full w-full"
+				className="pointer-events-none fixed bottom-0 left-0 right-0 top-0 z-[5] h-full w-full"
 				pointer-events-none
 			/>
 		</>

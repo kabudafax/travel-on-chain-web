@@ -12,9 +12,10 @@ const font = Montserrat({
 	subsets: ['latin']
 });
 const navigation = [
-	{ name: 'Marketplace', href: '#' },
+	{ name: 'Marketplace', href: '/' },
 	{ name: 'Share to X', href: 'https://twitter.com/VitalikButerin' },
-	{ name: 'Github', href: 'https://github.com/composable-NFT' }
+	// { name: 'Github', href: 'https://github.com/composable-NFT' }
+	{ name: 'Github', href: 'https://github.com/Travel-on-chain' }
 ];
 
 export const Navbar = ({ className }: { className: String }) => {
@@ -68,7 +69,9 @@ export const Navbar = ({ className }: { className: String }) => {
 							smallScreen: 'avatar',
 							largeScreen: 'full'
 						}}
-					>Connect Wallet</ConnectButton>
+					>
+						Connect Wallet
+					</ConnectButton>
 				</Link>
 			</div>
 		</nav>

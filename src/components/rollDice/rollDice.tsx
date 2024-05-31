@@ -156,9 +156,14 @@ export const RollDice = ({ onDiceChange }: { onDiceChange: Function }) => {
 						</div>
 					)
 				});
-				for (let index = 0; index < diceNumber; index++) {
-					await onDiceChange(1);
-				}
+				setTimeout(async () => {
+					for (let index = 0; index < diceNumber; index++) {
+						await onDiceChange(1);
+					}
+				}, 3000);
+				// for (let index = 0; index < diceNumber; index++) {
+				// 	await onDiceChange(1);
+				// }
 			}
 		} catch (error) {
 			console.log(error);
@@ -166,7 +171,7 @@ export const RollDice = ({ onDiceChange }: { onDiceChange: Function }) => {
 	}
 
 	// Dice roll animation
-	const handleDiceclick = () => {
+	const handleDiceclick = async () => {
 		document.getElementById('dice')!.addEventListener('click', async () => {
 			const dice: HTMLElement = document.getElementById('dice')!;
 
@@ -235,14 +240,14 @@ export const RollDice = ({ onDiceChange }: { onDiceChange: Function }) => {
 				// 		'53451079860721686341348306905162466791097797790594216056973463453765963746680'
 				// 	)
 				// }
-				// onClick={GetRandom}
+				onClick={GetRandom}
 				// onClick={async () => {
 				// 	const num = Math.floor(Math.random() * 6) + 1;
 				// 	for (let index = 0; index < num; index++) {
 				// 		await onDiceChange(1);
 				// 	}
 				// }}
-				onClick={handleDiceclick}
+				// onClick={handleDiceclick}
 				style={{ zIndex: 9 }}
 				className={cn(
 					'dice-button !z-6 !pointer-events-auto absolute left-[30%] top-[40%] '

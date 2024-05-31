@@ -95,7 +95,7 @@ export const MintButton = ({ metaData, img }: PinataMetaData) => {
 		setLoadingText('NFT数据上传中...');
 		savePoint();
 		await sleep(3000);
-		return mintFinished(1);
+		// return mintFinished(1);
 		try {
 			await uploadFile();
 			await sleep(3000);
