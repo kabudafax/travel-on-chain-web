@@ -18,46 +18,18 @@ import CardCollection from '@/components/side-widgets/card-collection';
 import FinishedModal from '@/components/finished-modal';
 import '@/components/rollDice/styles.scss';
 import { FinalMint } from '@/components/mint-ui/final-mint';
+import { Routes, right, left, up, upLeft } from './methods';
 
-//向右x+50y+14;
-//向左x - 48 y-22;
-type Point = { x: number; y: number; center: { x: number; y: number } };
-type Routes = Point[];
 const imgs = [tempale1, tempale2, panda];
 
-function right(point: Point) {
-	return {
-		x: point.x + 53,
-		y: point.y + 12
-	};
-}
-
-function left(point: Point) {
-	return {
-		x: point.x - 48,
-		y: point.y + 22
-	};
-}
-
-function up(point: Point) {
-	return {
-		x: point.x + 48,
-		y: point.y - 22
-	};
-}
-
-function upLeft(point: Point) {
-	return {
-		x: point.x - 53,
-		y: point.y - 12
-	};
-}
 export default function Game() {
 	const [canvasWidth, setCanvasWidth] = useState(0);
 	const [finishedModalShow, setFinishedModalShow] = useState(false);
 	const canvasRef = useRef(null);
 	const animateCanvasRef = useRef(null);
 	const gameRef = useRef(null);
+	const [windowWidth, setWindowWidth] = useState(0);
+	const [windowHeight, setWindowHeight] = useState(0);
 	// 从合约读取用户初始点位
 	// const { refetch } = useContractRead({
 	// 	...contractConfig,
@@ -164,134 +136,138 @@ export default function Game() {
 	};
 
 	useEffect(() => {
-		const routes = generateRoutes(
-			{ x: 215, y: 126, center: { x: 180, y: 105 } },
-			[
-				{ dir: 'right', times: 3 },
-				{ dir: 'left', times: 5 },
-				{ dir: 'right', times: 2 },
-				{ dir: 'left', times: 3 },
-				{ dir: 'right', times: 3 },
-				{ dir: 'left', times: 2 },
-				{ dir: 'right', times: 2 },
-				{ dir: 'up', times: 4 },
-				{ dir: 'right', times: 4 },
-				{ dir: 'up', times: 4 },
-				{ dir: 'upLeft', times: 4 },
-				{ dir: 'up', times: 4 },
-				{ dir: 'upLeft', times: 10 },
-				{ dir: 'left', times: 1 }
-			]
-		)?.map((route, inx) => ({ ...route, center: centers[inx] }));
-		// console.log(routes, 'routes');
-		let game = new GameCanvas({
-			id: 'anicanvas',
-			width: 1000,
-			height: window.innerHeight,
-			routes: routes,
-			passRoutes: [],
-			manPic: user.src,
-			currentIndex: start
-		});
-		let bg = new GameCanvas({
-			id: 'canvas',
-			width: 1000,
-			height: window.innerHeight,
-			routes: [],
-			passRoutes: []
-		});
-
-		// @ts-ignore
-		gameRef.current = game;
-		// console.log(canvasRef.current, 'canvasRef.current');
-
-		if (canvasRef.current) {
-			const img = new Image();
-			const imgCordinates = [
-				{ x: 130, y: 150, size: [179 / 2, 160 / 2] },
-				{ x: 80, y: 380, size: [179 / 2, 160 / 2] },
-				// { x: 100, y: 56, size: [1280, 720] },
-				{ x: 600, y: 300, size: [1920 / 2, 1080 / 2] }
-			];
-			// img.onload = function () {
-			// 	const context = canvasRef.current.getContext('2d');
-			// 	context?.drawImage(img, 130, 150, 179 / 2, 160 / 2);
-			// };
-
-			// img.src = tempale1.src;
-			// const img2 = new Image();
-			// img2.onload = function () {
-			// 	const context = canvasRef.current.getContext('2d');
-
-			// 	context?.drawImage(img2, 80, 380, 179 / 2, 160 / 2);
-			// };
-			// img2.src = tempale2.src;
-			imgs.forEach((img, inx) => {
-				const imgSingle = new Image();
-				imgSingle.onload = function () {
-					// @ts-ignore
-					const context = canvasRef.current.getContext('2d');
-
-					if (inx === 3) {
-						context.save();
-						context.rotate((-10 * Math.PI) / 180);
-
-						context?.drawImage(
-							imgSingle,
-							imgCordinates[inx].x,
-							imgCordinates[inx].y,
-							...imgCordinates[inx].size
-						);
-						context.restore();
-					} else {
-						context?.drawImage(
-							imgSingle,
-							imgCordinates[inx].x,
-							imgCordinates[inx].y,
-							...imgCordinates[inx].size
-						);
-					}
-				};
-				imgSingle.src = img.src;
+		if (window !== undefined) {
+			const routes = generateRoutes(
+				{ x: 215, y: 126, center: { x: 180, y: 105 } },
+				[
+					{ dir: 'right', times: 3 },
+					{ dir: 'left', times: 5 },
+					{ dir: 'right', times: 2 },
+					{ dir: 'left', times: 3 },
+					{ dir: 'right', times: 3 },
+					{ dir: 'left', times: 2 },
+					{ dir: 'right', times: 2 },
+					{ dir: 'up', times: 4 },
+					{ dir: 'right', times: 4 },
+					{ dir: 'up', times: 4 },
+					{ dir: 'upLeft', times: 4 },
+					{ dir: 'up', times: 4 },
+					{ dir: 'upLeft', times: 10 },
+					{ dir: 'left', times: 1 }
+				]
+			)?.map((route, inx) => ({ ...route, center: centers[inx] }));
+			// console.log(routes, 'routes');
+			let game = new GameCanvas({
+				id: 'anicanvas',
+				width: 1000,
+				height: window.innerHeight,
+				routes: routes,
+				passRoutes: [],
+				manPic: user.src,
+				currentIndex: start
 			});
-			drawBoard(routes);
-			// 保存重新绘制的函数到store里面
-			setRenderCallback(() => {
-				drawBoard(routes);
+			let bg = new GameCanvas({
+				id: 'canvas',
+				width: 1000,
+				height: window.innerHeight,
+				routes: [],
+				passRoutes: []
 			});
-		}
-		if (animateCanvasRef?.current) {
-			const userIcon = new Image();
-			userIcon.onload = function () {
-				// @ts-ignore
-				const animaContext = animateCanvasRef?.current?.getContext('2d');
-				// console.log(animaContext, 'animate', animateCanvasRef);
-				animaContext?.drawImage(
-					userIcon,
-					centers[start].x,
-					centers[start].y,
-					30,
-					30
-				);
-			};
-			userIcon.src = user.src;
-		}
 
-		// 设置canvas绘制的宽高
-		const handleResize = () => {
-			setCanvasWidth(window.innerWidth * 0.7);
-		};
-		handleResize();
-		window.addEventListener('resize', handleResize);
-		// console.log(window);
+			// @ts-ignore
+			gameRef.current = game;
+			// console.log(canvasRef.current, 'canvasRef.current');
 
-		return () => {
 			if (canvasRef.current) {
-				// @ts-ignore
-				animateCanvasRef.current?.removeEventListener('click', go);
+				const img = new Image();
+				const imgCordinates = [
+					{ x: 130, y: 150, size: [179 / 2, 160 / 2] },
+					{ x: 80, y: 380, size: [179 / 2, 160 / 2] },
+					// { x: 100, y: 56, size: [1280, 720] },
+					{ x: 600, y: 300, size: [1920 / 2, 1080 / 2] }
+				];
+				// img.onload = function () {
+				// 	const context = canvasRef.current.getContext('2d');
+				// 	context?.drawImage(img, 130, 150, 179 / 2, 160 / 2);
+				// };
+
+				// img.src = tempale1.src;
+				// const img2 = new Image();
+				// img2.onload = function () {
+				// 	const context = canvasRef.current.getContext('2d');
+
+				// 	context?.drawImage(img2, 80, 380, 179 / 2, 160 / 2);
+				// };
+				// img2.src = tempale2.src;
+				imgs.forEach((img, inx) => {
+					const imgSingle = new Image();
+					imgSingle.onload = function () {
+						// @ts-ignore
+						const context = canvasRef.current.getContext('2d');
+
+						if (inx === 3) {
+							context.save();
+							context.rotate((-10 * Math.PI) / 180);
+
+							context?.drawImage(
+								imgSingle,
+								imgCordinates[inx].x,
+								imgCordinates[inx].y,
+								...imgCordinates[inx].size
+							);
+							context.restore();
+						} else {
+							context?.drawImage(
+								imgSingle,
+								imgCordinates[inx].x,
+								imgCordinates[inx].y,
+								...imgCordinates[inx].size
+							);
+						}
+					};
+					imgSingle.src = img.src;
+				});
+				drawBoard(routes);
+				// 保存重新绘制的函数到store里面
+				setRenderCallback(() => {
+					drawBoard(routes);
+				});
 			}
-			window.removeEventListener('resize', handleResize);
-		};
+			if (animateCanvasRef?.current) {
+				const userIcon = new Image();
+				userIcon.onload = function () {
+					// @ts-ignore
+					const animaContext = animateCanvasRef?.current?.getContext('2d');
+					// console.log(animaContext, 'animate', animateCanvasRef);
+					animaContext?.drawImage(
+						userIcon,
+						centers[start].x,
+						centers[start].y,
+						30,
+						30
+					);
+				};
+				userIcon.src = user.src;
+			}
+
+			// 设置canvas绘制的宽高
+			const handleResize = () => {
+				setCanvasWidth(window.innerWidth * 0.7);
+			};
+			handleResize();
+			setWindowWidth(window.innerWidth);
+			setWindowHeight(window.innerHeight);
+			window.addEventListener('resize', handleResize);
+			// console.log(window);
+
+			return () => {
+				if (canvasRef.current) {
+					// @ts-ignore
+					animateCanvasRef.current?.removeEventListener('click', go);
+				}
+				window.removeEventListener('resize', handleResize);
+			};
+		}
 	}, []);
 
 	async function go(moves: number) {
@@ -393,8 +369,8 @@ export default function Game() {
 				>
 					<div
 						style={{
-							width: finishedModalShow ? window.innerWidth : 0,
-							height: window.innerHeight,
+							width: finishedModalShow ? windowWidth : 0,
+							height: windowHeight,
 							background: 'rgba(0,0,0,0.5)',
 							position: 'absolute',
 							top: 0,

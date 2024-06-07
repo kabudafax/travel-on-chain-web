@@ -3,19 +3,28 @@ import React, {
 	useRef,
 	useImperativeHandle,
 	forwardRef,
-	useLayoutEffect
+	useLayoutEffect,
+	useState
 } from 'react';
 import ConfettiGenerator from 'confetti-js';
 import { object } from 'zod';
 const FireworksCanvas = forwardRef((props, ref) => {
-	const canvasRef = useRef(null);
+	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const intervalRef = useRef(null);
 	const particlesRef = useRef([]);
 	const [confetti, setConfetti] = React.useState(null);
-
+	const [windowWidth, setWindowWidth] = useState(0);
+	const [windowHeight, setWindowHeight] = useState(0);
 	// 创建 Particle 类
 	class Particle {
-		constructor(x, y, dx, dy, color) {
+		x: number;
+		y: number;
+		dx: number;
+		dy: number;
+		color: string;
+		life: number;
+		maxLife: number;
+		constructor(x: number, y: number, dx: number, dy: number, color: string) {
 			this.x = x;
 			this.y = y;
 			this.dx = dx;
@@ -31,7 +40,7 @@ const FireworksCanvas = forwardRef((props, ref) => {
 			this.life++;
 		}
 
-		draw(ctx) {
+		draw(ctx: CanvasRenderingContext2D) {
 			ctx.fillStyle = this.color;
 			ctx.beginPath();
 			ctx.arc(this.x, this.y, 4, 0, Math.PI * 2);
@@ -43,7 +52,10 @@ const FireworksCanvas = forwardRef((props, ref) => {
 		}
 	}
 
-	const createFirework = (ctx, canvas) => {
+	const createFirework = (
+		ctx: CanvasRenderingContext2D | null,
+		canvas: HTMLCanvasElement | null
+	) => {
 		const colors = ['#ff0043', '#14fc56', '#1e90ff', '#fffa65', '#ff9500'];
 		const color = colors[Math.floor(Math.random() * colors.length)];
 		const x = Math.random() * canvas.width;
@@ -64,12 +76,15 @@ const FireworksCanvas = forwardRef((props, ref) => {
 		particlesRef.current.forEach((p) => p.update());
 	};
 
-	const drawParticles = (ctx) => {
+	const drawParticles = (ctx: CanvasRenderingContext2D | null) => {
 		particlesRef.current.forEach((p) => p.draw(ctx));
 	};
 
-	const animate = (ctx, canvas) => {
-		ctx.clearRect(0, 0, canvas.width, canvas.height);
+	const animate = (
+		ctx: CanvasRenderingContext2D | null,
+		canvas: HTMLCanvasElement | null
+	) => {
+		ctx?.clearRect(0, 0, canvas?.width ?? 300, canvas?.height ?? 300);
 		updateParticles();
 		drawParticles(ctx);
 		requestAnimationFrame(() => animate(ctx, canvas));
@@ -78,7 +93,7 @@ const FireworksCanvas = forwardRef((props, ref) => {
 	// 定义 startFireworks 和 stopFireworks 函数
 	const startFireworks = () => {
 		const canvas = canvasRef.current;
-		const ctx = canvas.getContext('2d');
+		const ctx = canvas?.getContext('2d');
 		if (!intervalRef.current) {
 			createFirework(ctx, canvas);
 			intervalRef.current = setInterval(() => createFirework(ctx, canvas), 500); // 每0.5秒创建一个新的烟花
@@ -101,11 +116,13 @@ const FireworksCanvas = forwardRef((props, ref) => {
 
 	useEffect(() => {
 		const canvas = canvasRef.current;
-		const ctx = canvas.getContext('2d');
+		const ctx = canvas?.getContext('2d');
 		const resizeCanvas = () => {
 			canvas.width = window.innerWidth;
 			canvas.height = window.innerHeight;
 		};
+		setWindowWidth(window.innerWidth);
+		setWindowHeight(window.innerHeight);
 		resizeCanvas();
 
 		window.addEventListener('resize', resizeCanvas);
@@ -175,7 +192,7 @@ const FireworksCanvas = forwardRef((props, ref) => {
 					// top: 82,
 					left: 0,
 					right: 0,
-					width: window.innerWidth * 0.7,
+					width: windowWidth * 0.7,
 					pointerEvents: 'none'
 				}}
 			/>

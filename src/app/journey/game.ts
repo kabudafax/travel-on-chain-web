@@ -14,7 +14,7 @@ export default class GameCanvas {
 		this.points = [];
 		this.animateNum = 0;
 		// window.devicePixelRatio ||
-		this.dpr = window.devicePixelRatio || 1;
+		this.dpr = 1;
 		this.routes = options.routes;
 		this.passRoutes = options.passRoutes;
 		this.initCanvas();
@@ -149,7 +149,9 @@ export default class GameCanvas {
 			this.curIndex =
 				index + this.curIndex == this.routes.length ? 0 : index + this.curIndex;
 			console.log(this.curIndex, 'this.curIndex');
-			window.localStorage.setItem('currentPosition', this.curIndex);
+			if (window !== undefined) {
+				window.localStorage.setItem('currentPosition', this.curIndex);
+			}
 
 			const startPoint =
 				this.routes[
