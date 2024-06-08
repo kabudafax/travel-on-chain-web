@@ -138,20 +138,25 @@ export const MintButton = ({ metaData, img }: PinataMetaData) => {
 	};
 
 	const savePoint = () => {
-		const mintedPoint = localStorage.getItem('mintedPoint')
-			? JSON.parse(localStorage.getItem('mintedPoint') as string)
-			: [];
-		console.log('mintedPoint', mintedPoint);
-		let curIndex = localStorage.getItem('currentPosition');
-		if (curIndex) {
-			// @ts-ignore
-			curIndex = parseInt(curIndex, 10);
-			if (!mintedPoint.includes(curIndex)) {
-				mintedPoint.push(curIndex);
-				window.localStorage.setItem('mintedPoint', JSON.stringify(mintedPoint));
+		if (window !== undefined) {
+			const mintedPoint = localStorage.getItem('mintedPoint')
+				? JSON.parse(localStorage.getItem('mintedPoint') as string)
+				: [];
+			console.log('mintedPoint', mintedPoint);
+			let curIndex = localStorage.getItem('currentPosition');
+			if (curIndex) {
+				// @ts-ignore
+				curIndex = parseInt(curIndex, 10);
+				if (!mintedPoint.includes(curIndex)) {
+					mintedPoint.push(curIndex);
+					window.localStorage.setItem(
+						'mintedPoint',
+						JSON.stringify(mintedPoint)
+					);
+				}
 			}
+			renderCallback && renderCallback();
 		}
-		renderCallback && renderCallback();
 	};
 
 	return (
