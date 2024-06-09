@@ -5,6 +5,8 @@ import { Providers } from './provider';
 import { Toaster } from '@/components/ui/toaster';
 
 // import '../../public/cesium/Widgets/widgets.css';
+// 这个是为了在vercel中编译设置的，与对应的next.cpnfig.js对应
+import "cesium/Build/Cesium/Widgets/widgets.css";
 
 import * as china from '@/components/china.json';
 
