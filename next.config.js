@@ -11,7 +11,7 @@ module.exports = {
 	typescript: {
 		ignoreBuildErrors: true
 	},
-	webpack: (config, { isServer }) => {
+	webpack: (config, { isServer,webpack }) => {
 		// 解析cesium导入别名
 		config.resolve.alias = {
 			...config.resolve.alias,
