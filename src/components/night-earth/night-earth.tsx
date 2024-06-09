@@ -2,11 +2,13 @@
 import { cn } from '@/lib/utils';
 import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import * as Cesium from "cesium"
+
 
 // Ensure Cesium is only imported in the client-side bundle
 if (typeof window !== 'undefined') {
-	var Cesium = require('cesium/Cesium');
-	require('cesium/Widgets/widgets.css');
+	// var Cesium = require('cesium/Cesium');
+	// require('cesium/Widgets/widgets.css');
 }
 
 export default function NightEarth({ className }: { className: String }) {
