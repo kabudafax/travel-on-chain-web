@@ -7,8 +7,7 @@
 		"build": "next build",
 		"start": "next start",
 		"prettier": "prettier --write .",
-		"lint": "next lint",
-		"postinstall": "symlink-dir node_modules/cesium/Build/Cesium public/cesium"
+		"lint": "next lint"
 	},
 	"dependencies": {
 		"@google/model-viewer": "^3.4.0",
